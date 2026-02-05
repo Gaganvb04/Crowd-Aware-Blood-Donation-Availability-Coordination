@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard - BloodConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>BloodConnect</h2>
+                <span class="user-role">Donor</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" data-section="overview">
+                    <span class="icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="#profile" class="nav-item" data-section="profile">
+                    <span class="icon">👤</span>
+                    My Profile
+                </a>
+                <a href="#donation-history" class="nav-item" data-section="donation-history">
+                    <span class="icon">📜</span>
+                    Donation History
+                </a>
+                <a href="#camps" class="nav-item" data-section="camps">
+                    <span class="icon">🏕️</span>
+                    Nearby Camps
+                </a>
+                <a href="#book-slot" class="nav-item" data-section="book-slot">
+                    <span class="icon">📅</span>
+                    Book Slot
+                </a>
+                <a href="#appointments" class="nav-item" data-section="appointments">
+                    <span class="icon">📋</span>
+                    My Appointments
+                </a>
+                <a href="#notifications" class="nav-item" data-section="notifications">
+                    <span class="icon">🔔</span>
+                    Notifications
+                    <span class="badge">3</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="index.html" class="logout-btn">
+                    <span class="icon">🚪</span>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="menu-toggle">☰</button>
+                    <h1 id="page-title">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <img src="images/user-avatar.png" alt="Profile" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23dc3545%22/><text x=%2220%22 y=%2226%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2218%22 font-family=%22Arial%22>D</text></svg>'">
+                        <div>
+                            <span class="user-name">John Doe</span>
+                            <span class="user-blood">O+</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="overview" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💉</div>
+                        <div class="stat-details">
+                            <h3>Total Donations</h3>
+                            <p class="stat-number">12</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">❤️</div>
+                        <div class="stat-details">
+                            <h3>Lives Saved</h3>
+                            <p class="stat-number">36</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-details">
+                            <h3>Next Eligible</h3>
+                            <p class="stat-number">45 days</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-details">
+                            <h3>Achievement Level</h3>
+                            <p class="stat-number">Gold</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-widgets">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3>Eligibility Status</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="eligibility-card eligible">
+                                <div class="status-icon">✓</div>
+                                <div class="status-details">
+                                    <h4>Currently Eligible</h4>
+                                    <p>You can donate blood now</p>
+                                    <ul class="criteria-list">
+                                        <li>✓ Age: 28 years (18-65)</li>
+                                        <li>✓ Weight: 65 kg (50+ kg)</li>
+                                        <li>✓ Last Donation: 4 months ago</li>
+                                        <li>✓ Health Status: Good</li>
+                                    </ul>
+                                    <a href="#book-slot" class="btn-primary">Book Donation Slot</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3>Upcoming Camps Near You</h3>
+                            <a href="#camps" class="view-all">View All</a>
+                        </div>
+                        <div class="widget-content">
+                            <div class="camp-list">
+                                <div class="camp-item">
+                                    <div class="camp-date">
+                                        <span class="day">15</span>
+                                        <span class="month">Feb</span>
+                                    </div>
+                                    <div class="camp-details">
+                                        <h4>City Hospital Blood Donation Camp</h4>
+                                        <p>📍 City Hospital, Main Road, Pollachi</p>
+                                        <p>⏰ 9:00 AM - 5:00 PM</p>
+                                        <span class="distance">2.5 km away</span>
+                                    </div>
+                                    <button class="btn-secondary btn-sm">Book Slot</button>
+                                </div>
+                                <div class="camp-item">
+                                    <div class="camp-date">
+                                        <span class="day">20</span>
+                                        <span class="month">Feb</span>
+                                    </div>
+                                    <div class="camp-details">
+                                        <h4>Community Blood Drive</h4>
+                                        <p>📍 Community Center, Pollachi</p>
+                                        <p>⏰ 10:00 AM - 4:00 PM</p>
+                                        <span class="distance">3.8 km away</span>
+                                    </div>
+                                    <button class="btn-secondary btn-sm">Book Slot</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-widgets">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3>Donation Impact</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="impact-visualization">
+                                <div class="impact-item">
+                                    <div class="impact-bar" style="--percentage: 75%"></div>
+                                    <span>Emergency Cases: 9</span>
+                                </div>
+                                <div class="impact-item">
+                                    <div class="impact-bar" style="--percentage: 50%"></div>
+                                    <span>Surgeries: 6</span>
+                                </div>
+                                <div class="impact-item">
+                                    <div class="impact-bar" style="--percentage: 90%"></div>
+                                    <span>Cancer Patients: 11</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3>Recent Notifications</h3>
+                            <a href="#notifications" class="view-all">View All</a>
+                        </div>
+                        <div class="widget-content">
+                            <div class="notification-list">
+                                <div class="notification-item unread">
+                                    <span class="notification-icon">🔔</span>
+                                    <div class="notification-content">
+                                        <p><strong>Urgent: O+ Blood Needed</strong></p>
+                                        <p>City Hospital needs O+ blood urgently for emergency surgery</p>
+                                        <span class="notification-time">2 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <span class="notification-icon">📅</span>
+                                    <div class="notification-content">
+                                        <p><strong>Donation Slot Confirmed</strong></p>
+                                        <p>Your slot at City Hospital on Feb 15 at 10:00 AM is confirmed</p>
+                                        <span class="notification-time">1 day ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <span class="notification-icon">🏕️</span>
+                                    <div class="notification-content">
+                                        <p><strong>New Camp Near You</strong></p>
+                                        <p>Blood donation camp scheduled at Community Center on Feb 20</p>
+                                        <span class="notification-time">2 days ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="content-section">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <h2>My Profile</h2>
+                        <button class="btn-primary" id="editProfileBtn">Edit Profile</button>
+                    </div>
+                    <form id="profileForm" class="profile-form">
+                        <div class="profile-photo-section">
+                            <div class="profile-photo">
+                                <img src="images/user-avatar.png" alt="Profile" id="profileImage" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><circle cx=%2260%22 cy=%2260%22 r=%2260%22 fill=%22%23dc3545%22/><text x=%2260%22 y=%2275%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2250%22 font-family=%22Arial%22>D</text></svg>'">
+                            </div>
+                            <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                            <button type="button" class="btn-secondary btn-sm" id="changePhotoBtn">Change Photo</button>
+                        </div>
+
+                        <div class="form-sections">
+                            <div class="form-section">
+                                <h3>Personal Information</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Full Name</label>
+                                        <input type="text" value="John Doe" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Age</label>
+                                        <input type="number" value="28" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <input type="text" value="Male" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Blood Group</label>
+                                        <input type="text" value="O+" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Contact Information</h3>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" value="john.doe@email.com" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="tel" value="9876543210" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <textarea disabled rows="3">123 Main Street, Pollachi, Tamil Nadu, 642001</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Health Information</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Weight (kg)</label>
+                                        <input type="number" value="65" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Last Donation Date</label>
+                                        <input type="date" value="2025-10-05" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Health Status</label>
+                                    <input type="text" value="Good" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="display: none;">
+                            <button type="submit" class="btn-primary">Save Changes</button>
+                            <button type="button" class="btn-secondary" id="cancelEditBtn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Donation History Section -->
+            <section id="donation-history" class="content-section">
+                <div class="history-container">
+                    <h2>Donation History</h2>
+                    <div class="history-stats">
+                        <div class="stat">
+                            <span class="stat-label">Total Donations:</span>
+                            <span class="stat-value">12</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Total Blood Donated:</span>
+                            <span class="stat-value">5.4 Liters</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">First Donation:</span>
+                            <span class="stat-value">Jan 15, 2022</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Blood Bank</th>
+                                    <th>Location</th>
+                                    <th>Quantity</th>
+                                    <th>Certificate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Oct 05, 2025</td>
+                                    <td>City Blood Bank</td>
+                                    <td>Pollachi</td>
+                                    <td>450 ml</td>
+                                    <td><a href="#" class="btn-link">Download</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Apr 12, 2025</td>
+                                    <td>Community Center</td>
+                                    <td>Pollachi</td>
+                                    <td>450 ml</td>
+                                    <td><a href="#" class="btn-link">Download</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Oct 20, 2024</td>
+                                    <td>Hospital Blood Bank</td>
+                                    <td>Coimbatore</td>
+                                    <td>450 ml</td>
+                                    <td><a href="#" class="btn-link">Download</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Apr 05, 2024</td>
+                                    <td>City Blood Bank</td>
+                                    <td>Pollachi</td>
+                                    <td>450 ml</td>
+                                    <td><a href="#" class="btn-link">Download</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nearby Camps Section -->
+            <section id="camps" class="content-section">
+                <div class="camps-container">
+                    <div class="section-header">
+                        <h2>Nearby Blood Donation Camps</h2>
+                        <div class="filters">
+                            <input type="text" placeholder="Search camps..." class="search-input">
+                            <select class="filter-select">
+                                <option>All Dates</option>
+                                <option>This Week</option>
+                                <option>This Month</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Map Container -->
+                    <div class="map-container">
+                        <div id="campMap" class="map-placeholder">
+                            <p>🗺️ Interactive Map<br>Showing camps near Pollachi, Tamil Nadu</p>
+                        </div>
+                    </div>
+
+                    <!-- Camps List -->
+                    <div class="camps-grid">
+                        <div class="camp-card">
+                            <div class="camp-card-header">
+                                <h3>City Hospital Blood Donation Camp</h3>
+                                <span class="camp-status available">Available</span>
+                            </div>
+                            <div class="camp-card-body">
+                                <p><strong>📍 Location:</strong> City Hospital, Main Road, Pollachi</p>
+                                <p><strong>📅 Date:</strong> February 15, 2026</p>
+                                <p><strong>⏰ Time:</strong> 9:00 AM - 5:00 PM</p>
+                                <p><strong>📏 Distance:</strong> 2.5 km away</p>
+                                <p><strong>👥 Slots:</strong> 45 available</p>
+                            </div>
+                            <div class="camp-card-footer">
+                                <button class="btn-primary btn-block">Book Slot</button>
+                            </div>
+                        </div>
+
+                        <div class="camp-card">
+                            <div class="camp-card-header">
+                                <h3>Community Blood Drive</h3>
+                                <span class="camp-status available">Available</span>
+                            </div>
+                            <div class="camp-card-body">
+                                <p><strong>📍 Location:</strong> Community Center, Pollachi</p>
+                                <p><strong>📅 Date:</strong> February 20, 2026</p>
+                                <p><strong>⏰ Time:</strong> 10:00 AM - 4:00 PM</p>
+                                <p><strong>📏 Distance:</strong> 3.8 km away</p>
+                                <p><strong>👥 Slots:</strong> 30 available</p>
+                            </div>
+                            <div class="camp-card-footer">
+                                <button class="btn-primary btn-block">Book Slot</button>
+                            </div>
+                        </div>
+
+                        <div class="camp-card">
+                            <div class="camp-card-header">
+                                <h3>District Blood Bank Camp</h3>
+                                <span class="camp-status filling-fast">Filling Fast</span>
+                            </div>
+                            <div class="camp-card-body">
+                                <p><strong>📍 Location:</strong> District Hospital, Pollachi</p>
+                                <p><strong>📅 Date:</strong> February 22, 2026</p>
+                                <p><strong>⏰ Time:</strong> 8:00 AM - 6:00 PM</p>
+                                <p><strong>📏 Distance:</strong> 4.2 km away</p>
+                                <p><strong>👥 Slots:</strong> 8 available</p>
+                            </div>
+                            <div class="camp-card-footer">
+                                <button class="btn-primary btn-block">Book Slot</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Book Slot Section -->
+            <section id="book-slot" class="content-section">
+                <div class="booking-container">
+                    <h2>Book Donation Slot</h2>
+                    <form id="bookingForm" class="booking-form">
+                        <div class="form-step active" data-step="1">
+                            <h3>Select Camp</h3>
+                            <div class="camp-selection">
+                                <label class="camp-option">
+                                    <input type="radio" name="camp" value="camp1" required>
+                                    <div class="camp-option-content">
+                                        <h4>City Hospital Blood Donation Camp</h4>
+                                        <p>City Hospital, Main Road, Pollachi</p>
+                                        <p>February 15, 2026 | 9:00 AM - 5:00 PM</p>
+                                    </div>
+                                </label>
+                                <label class="camp-option">
+                                    <input type="radio" name="camp" value="camp2">
+                                    <div class="camp-option-content">
+                                        <h4>Community Blood Drive</h4>
+                                        <p>Community Center, Pollachi</p>
+                                        <p>February 20, 2026 | 10:00 AM - 4:00 PM</p>
+                                    </div>
+                                </label>
+                                <label class="camp-option">
+                                    <input type="radio" name="camp" value="camp3">
+                                    <div class="camp-option-content">
+                                        <h4>District Blood Bank Camp</h4>
+                                        <p>District Hospital, Pollachi</p>
+                                        <p>February 22, 2026 | 8:00 AM - 6:00 PM</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <button type="button" class="btn-primary" onclick="nextStep(2)">Next</button>
+                        </div>
+
+                        <div class="form-step" data-step="2">
+                            <h3>Select Time Slot</h3>
+                            <div class="time-slots">
+                                <label class="time-slot">
+                                    <input type="radio" name="time" value="09:00" required>
+                                    <span>9:00 AM</span>
+                                </label>
+                                <label class="time-slot">
+                                    <input type="radio" name="time" value="10:00">
+                                    <span>10:00 AM</span>
+                                </label>
+                                <label class="time-slot">
+                                    <input type="radio" name="time" value="11:00">
+                                    <span>11:00 AM</span>
+                                </label>
+                                <label class="time-slot">
+                                    <input type="radio" name="time" value="12:00">
+                                    <span>12:00 PM</span>
+                                </label>
+                                <label class="time-slot">
+                                    <input type="radio" name="time" value="13:00">
+                                    <span>1:00 PM</span>
+                                </label>
+                                <label class="time-slot">
+                                    <input type="radio" name="time" value="14:00">
+                                    <span>2:00 PM</span>
+                                </label>
+                                <label class="time-slot">
+                                    <input type="radio" name="time" value="15:00">
+                                    <span>3:00 PM</span>
+                                </label>
+                                <label class="time-slot">
+                                    <input type="radio" name="time" value="16:00">
+                                    <span>4:00 PM</span>
+                                </label>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="prevStep(1)">Back</button>
+                                <button type="button" class="btn-primary" onclick="nextStep(3)">Next</button>
+                            </div>
+                        </div>
+
+                        <div class="form-step" data-step="3">
+                            <h3>Confirm Booking</h3>
+                            <div class="booking-summary">
+                                <div class="summary-item">
+                                    <span class="summary-label">Camp:</span>
+                                    <span class="summary-value" id="summarycamp">City Hospital Blood Donation Camp</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Date:</span>
+                                    <span class="summary-value" id="summaryDate">February 15, 2026</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Time:</span>
+                                    <span class="summary-value" id="summaryTime">10:00 AM</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Location:</span>
+                                    <span class="summary-value" id="summaryLocation">City Hospital, Main Road, Pollachi</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" required>
+                                    I confirm that I am eligible to donate blood and have no health restrictions
+                                </label>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="prevStep(2)">Back</button>
+                                <button type="submit" class="btn-primary">Confirm Booking</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Appointments Section -->
+            <section id="appointments" class="content-section">
+                <div class="appointments-container">
+                    <h2>My Appointments</h2>
+                    <div class="appointments-tabs">
+                        <button class="tab-btn active" data-tab="upcoming">Upcoming</button>
+                        <button class="tab-btn" data-tab="past">Past</button>
+                        <button class="tab-btn" data-tab="cancelled">Cancelled</button>
+                    </div>
+
+                    <div class="tab-content active" id="upcoming">
+                        <div class="appointments-list">
+                            <div class="appointment-card">
+                                <div class="appointment-header">
+                                    <h3>City Hospital Blood Donation Camp</h3>
+                                    <span class="appointment-status confirmed">Confirmed</span>
+                                </div>
+                                <div class="appointment-body">
+                                    <p><strong>📅 Date:</strong> February 15, 2026</p>
+                                    <p><strong>⏰ Time:</strong> 10:00 AM</p>
+                                    <p><strong>📍 Location:</strong> City Hospital, Main Road, Pollachi</p>
+                                    <p><strong>🆔 Booking ID:</strong> BD-2026-001234</p>
+                                </div>
+                                <div class="appointment-footer">
+                                    <button class="btn-secondary btn-sm">View Details</button>
+                                    <button class="btn-danger btn-sm">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="past">
+                        <div class="appointments-list">
+                            <div class="appointment-card">
+                                <div class="appointment-header">
+                                    <h3>Community Blood Drive</h3>
+                                    <span class="appointment-status completed">Completed</span>
+                                </div>
+                                <div class="appointment-body">
+                                    <p><strong>📅 Date:</strong> October 5, 2025</p>
+                                    <p><strong>⏰ Time:</strong> 11:00 AM</p>
+                                    <p><strong>📍 Location:</strong> Community Center, Pollachi</p>
+                                    <p><strong>💉 Donated:</strong> 450 ml</p>
+                                </div>
+                                <div class="appointment-footer">
+                                    <button class="btn-secondary btn-sm">Download Certificate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="cancelled">
+                        <div class="appointments-list">
+                            <p class="no-data">No cancelled appointments</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications Section -->
+            <section id="notifications" class="content-section">
+                <div class="notifications-container">
+                    <div class="section-header">
+                        <h2>Notifications</h2>
+                        <button class="btn-secondary btn-sm">Mark All as Read</button>
+                    </div>
+                    <div class="notifications-list">
+                        <div class="notification-card unread">
+                            <div class="notification-icon urgent">🚨</div>
+                            <div class="notification-content">
+                                <h4>Urgent: O+ Blood Needed</h4>
+                                <p>City Hospital needs O+ blood urgently for an emergency surgery. Your blood type matches. Can you donate?</p>
+                                <span class="notification-time">2 hours ago</span>
+                                <div class="notification-actions">
+                                    <button class="btn-primary btn-sm">I Can Donate</button>
+                                    <button class="btn-secondary btn-sm">Not Available</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notification-card">
+                            <div class="notification-icon success">✓</div>
+                            <div class="notification-content">
+                                <h4>Donation Slot Confirmed</h4>
+                                <p>Your blood donation slot at City Hospital on February 15, 2026 at 10:00 AM has been confirmed.</p>
+                                <span class="notification-time">1 day ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-card">
+                            <div class="notification-icon info">ℹ️</div>
+                            <div class="notification-content">
+                                <h4>New Camp Near You</h4>
+                                <p>A new blood donation camp has been scheduled at Community Center on February 20, 2026. Book your slot now!</p>
+                                <span class="notification-time">2 days ago</span>
+                                <div class="notification-actions">
+                                    <button class="btn-secondary btn-sm">View Camp</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notification-card">
+                            <div class="notification-icon reminder">📅</div>
+                            <div class="notification-content">
+                                <h4>Reminder: You're Eligible to Donate</h4>
+                                <p>It's been 6 months since your last donation. You're now eligible to donate again. Book a slot today!</p>
+                                <span class="notification-time">3 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/dashboard-common.js"></script>
+    <script src="js/donor-dashboard.js"></script>
+</body>
+</html>

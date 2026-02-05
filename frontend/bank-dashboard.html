@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank Dashboard - BloodConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>BloodConnect</h2>
+                <span class="user-role">Blood Bank</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" data-section="overview">
+                    <span class="icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="#inventory" class="nav-item" data-section="inventory">
+                    <span class="icon">🩸</span>
+                    Blood Inventory
+                </a>
+                <a href="#camps" class="nav-item" data-section="camps">
+                    <span class="icon">🏕️</span>
+                    Manage Camps
+                </a>
+                <a href="#requests" class="nav-item" data-section="requests">
+                    <span class="icon">🏥</span>
+                    Hospital Requests
+                    <span class="badge">5</span>
+                </a>
+                <a href="#donations" class="nav-item" data-section="donations">
+                    <span class="icon">💉</span>
+                    Donations
+                </a>
+                <a href="#network" class="nav-item" data-section="network">
+                    <span class="icon">🔗</span>
+                    Blood Bank Network
+                </a>
+                <a href="#analytics" class="nav-item" data-section="analytics">
+                    <span class="icon">📈</span>
+                    Analytics
+                </a>
+                <a href="#alerts" class="nav-item" data-section="alerts">
+                    <span class="icon">⚠️</span>
+                    Alerts & Notifications
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="index.html" class="logout-btn">
+                    <span class="icon">🚪</span>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <button class="menu-toggle">☰</button>
+                    <h1 id="page-title">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <img src="images/bank-logo.png" alt="Bank Logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><rect width=%2240%22 height=%2240%22 fill=%22%23dc3545%22/><text x=%2220%22 y=%2226%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2218%22 font-family=%22Arial%22>BB</text></svg>'">
+                        <div>
+                            <span class="user-name">City Blood Bank</span>
+                            <span class="user-blood">Pollachi</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="overview" class="content-section active">
+                <!-- Critical Alerts -->
+                <div class="alert-banner critical">
+                    <span class="alert-icon">⚠️</span>
+                    <div class="alert-content">
+                        <strong>Critical Alert:</strong> O- blood stock below safety level (5 units remaining)
+                        <button class="btn-sm btn-light">Send Alert to Donors</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🩸</div>
+                        <div class="stat-details">
+                            <h3>Total Blood Units</h3>
+                            <p class="stat-number">1,247</p>
+                            <span class="stat-change positive">↑ 12% from last month</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💉</div>
+                        <div class="stat-details">
+                            <h3>Today's Collections</h3>
+                            <p class="stat-number">34</p>
+                            <span class="stat-change">Target: 50 units</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏥</div>
+                        <div class="stat-details">
+                            <h3>Pending Requests</h3>
+                            <p class="stat-number">5</p>
+                            <span class="stat-change urgent">2 urgent</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-details">
+                            <h3>Expiring Soon</h3>
+                            <p class="stat-number">28</p>
+                            <span class="stat-change">Within 7 days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blood Group Stock Overview -->
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3>Blood Group Inventory Status</h3>
+                        <button class="btn-secondary btn-sm">View Details</button>
+                    </div>
+                    <div class="widget-content">
+                        <div class="blood-groups-grid">
+                            <div class="blood-group-card status-good">
+                                <h4>A+</h4>
+                                <p class="units">245 units</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="status-label">Good Stock</span>
+                            </div>
+                            <div class="blood-group-card status-low">
+                                <h4>A-</h4>
+                                <p class="units">42 units</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width: 35%"></div>
+                                </div>
+                                <span class="status-label">Low Stock</span>
+                            </div>
+                            <div class="blood-group-card status-good">
+                                <h4>B+</h4>
+                                <p class="units">198 units</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width: 75%"></div>
+                                </div>
+                                <span class="status-label">Good Stock</span>
+                            </div>
+                            <div class="blood-group-card status-low">
+                                <h4>B-</h4>
+                                <p class="units">38 units</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width: 30%"></div>
+                                </div>
+                                <span class="status-label">Low Stock</span>
+                            </div>
+                            <div class="blood-group-card status-good">
+                                <h4>AB+</h4>
+                                <p class="units">156 units</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width: 65%"></div>
+                                </div>
+                                <span class="status-label">Good Stock</span>
+                            </div>
+                            <div class="blood-group-card status-critical">
+                                <h4>AB-</h4>
+                                <p class="units">18 units</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width: 15%"></div>
+                                </div>
+                                <span class="status-label">Critical</span>
+                            </div>
+                            <div class="blood-group-card status-good">
+                                <h4>O+</h4>
+                                <p class="units">312 units</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width: 90%"></div>
+                                </div>
+                                <span class="status-label">Excellent</span>
+                            </div>
+                            <div class="blood-group-card status-critical">
+                                <h4>O-</h4>
+                                <p class="units">5 units</p>
+                                <div class="stock-bar">
+                                    <div class="stock-fill" style="width: 5%"></div>
+                                </div>
+                                <span class="status-label">Critical</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-widgets">
+                    <!-- Urgent Hospital Requests -->
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3>Urgent Hospital Requests</h3>
+                            <a href="#requests" class="view-all">View All</a>
+                        </div>
+                        <div class="widget-content">
+                            <div class="requests-list">
+                                <div class="request-item urgent">
+                                    <div class="request-header">
+                                        <h4>City Hospital</h4>
+                                        <span class="priority-badge emergency">Emergency</span>
+                                    </div>
+                                    <p><strong>Blood Type:</strong> O-</p>
+                                    <p><strong>Units Needed:</strong> 4</p>
+                                    <p><strong>Time:</strong> 30 mins ago</p>
+                                    <div class="request-actions">
+                                        <button class="btn-primary btn-sm">Approve</button>
+                                        <button class="btn-secondary btn-sm">View Details</button>
+                                    </div>
+                                </div>
+                                <div class="request-item">
+                                    <div class="request-header">
+                                        <h4>District Hospital</h4>
+                                        <span class="priority-badge high">High Priority</span>
+                                    </div>
+                                    <p><strong>Blood Type:</strong> A+</p>
+                                    <p><strong>Units Needed:</strong> 2</p>
+                                    <p><strong>Time:</strong> 2 hours ago</p>
+                                    <div class="request-actions">
+                                        <button class="btn-primary btn-sm">Approve</button>
+                                        <button class="btn-secondary btn-sm">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Donation Schedule -->
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3>Today's Donation Schedule</h3>
+                            <a href="#donations" class="view-all">View All</a>
+                        </div>
+                        <div class="widget-content">
+                            <div class="schedule-list">
+                                <div class="schedule-item">
+                                    <span class="time">10:00 AM</span>
+                                    <div class="schedule-details">
+                                        <p><strong>John Doe</strong> - O+</p>
+                                        <span class="status confirmed">Confirmed</span>
+                                    </div>
+                                </div>
+                                <div class="schedule-item">
+                                    <span class="time">11:00 AM</span>
+                                    <div class="schedule-details">
+                                        <p><strong>Sarah Smith</strong> - A+</p>
+                                        <span class="status confirmed">Confirmed</span>
+                                    </div>
+                                </div>
+                                <div class="schedule-item">
+                                    <span class="time">2:00 PM</span>
+                                    <div class="schedule-details">
+                                        <p><strong>Mike Johnson</strong> - B+</p>
+                                        <span class="status pending">Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inventory Section -->
+            <section id="inventory" class="content-section">
+                <div class="inventory-container">
+                    <div class="section-header">
+                        <h2>Blood Inventory Management</h2>
+                        <div class="header-actions">
+                            <button class="btn-primary" id="addStockBtn">Add Stock</button>
+                            <button class="btn-secondary" id="generateReportBtn">Generate Report</button>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filters-bar">
+                        <select class="filter-select">
+                            <option value="">All Blood Groups</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                        <select class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="available">Available</option>
+                            <option value="reserved">Reserved</option>
+                            <option value="expiring">Expiring Soon</option>
+                        </select>
+                        <input type="text" placeholder="Search by Bag ID..." class="search-input">
+                    </div>
+
+                    <!-- Inventory Table -->
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Bag ID</th>
+                                    <th>Blood Group</th>
+                                    <th>Volume</th>
+                                    <th>Collection Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Status</th>
+                                    <th>QR Code</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>BB-2026-0001</td>
+                                    <td><span class="blood-type">O+</span></td>
+                                    <td>450 ml</td>
+                                    <td>Feb 01, 2026</td>
+                                    <td>Apr 01, 2026</td>
+                                    <td><span class="status-badge available">Available</span></td>
+                                    <td><button class="btn-link">View QR</button></td>
+                                    <td>
+                                        <button class="btn-icon" title="Edit">✏️</button>
+                                        <button class="btn-icon" title="Reserve">📌</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BB-2026-0002</td>
+                                    <td><span class="blood-type">A-</span></td>
+                                    <td>450 ml</td>
+                                    <td>Jan 28, 2026</td>
+                                    <td>Feb 10, 2026</td>
+                                    <td><span class="status-badge expiring">Expiring Soon</span></td>
+                                    <td><button class="btn-link">View QR</button></td>
+                                    <td>
+                                        <button class="btn-icon" title="Edit">✏️</button>
+                                        <button class="btn-icon" title="Reserve">📌</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BB-2026-0003</td>
+                                    <td><span class="blood-type">B+</span></td>
+                                    <td>450 ml</td>
+                                    <td>Feb 03, 2026</td>
+                                    <td>Apr 03, 2026</td>
+                                    <td><span class="status-badge reserved">Reserved</span></td>
+                                    <td><button class="btn-link">View QR</button></td>
+                                    <td>
+                                        <button class="btn-icon" title="Edit">✏️</button>
+                                        <button class="btn-icon" title="Unreserve">❌</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Camps Section -->
+            <section id="camps" class="content-section">
+                <div class="camps-management-container">
+                    <div class="section-header">
+                        <h2>Manage Donation Camps</h2>
+                        <button class="btn-primary" id="createCampBtn">Create New Camp</button>
+                    </div>
+
+                    <!-- Active Camps -->
+                    <div class="camps-section">
+                        <h3>Active Camps</h3>
+                        <div class="camps-grid">
+                            <div class="camp-management-card">
+                                <div class="camp-card-header">
+                                    <h4>City Hospital Blood Donation Camp</h4>
+                                    <span class="camp-badge active">Active</span>
+                                </div>
+                                <div class="camp-card-body">
+                                    <p><strong>Date:</strong> February 15, 2026</p>
+                                    <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+                                    <p><strong>Location:</strong> City Hospital, Main Road</p>
+                                    <p><strong>Total Slots:</strong> 50</p>
+                                    <p><strong>Booked:</strong> 5 | <strong>Available:</strong> 45</p>
+                                    <p><strong>Collections:</strong> 0 units</p>
+                                </div>
+                                <div class="camp-card-footer">
+                                    <button class="btn-secondary btn-sm">Manage Slots</button>
+                                    <button class="btn-secondary btn-sm">Edit Camp</button>
+                                    <button class="btn-danger btn-sm">Cancel Camp</button>
+                                </div>
+                            </div>
+
+                            <div class="camp-management-card">
+                                <div class="camp-card-header">
+                                    <h4>Community Blood Drive</h4>
+                                    <span class="camp-badge active">Active</span>
+                                </div>
+                                <div class="camp-card-body">
+                                    <p><strong>Date:</strong> February 20, 2026</p>
+                                    <p><strong>Time:</strong> 10:00 AM - 4:00 PM</p>
+                                    <p><strong>Location:</strong> Community Center</p>
+                                    <p><strong>Total Slots:</strong> 40</p>
+                                    <p><strong>Booked:</strong> 10 | <strong>Available:</strong> 30</p>
+                                    <p><strong>Collections:</strong> 0 units</p>
+                                </div>
+                                <div class="camp-card-footer">
+                                    <button class="btn-secondary btn-sm">Manage Slots</button>
+                                    <button class="btn-secondary btn-sm">Edit Camp</button>
+                                    <button class="btn-danger btn-sm">Cancel Camp</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Create Camp Form (Hidden by default) -->
+                    <div id="createCampForm" class="modal" style="display: none;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>Create New Donation Camp</h3>
+                                <button class="modal-close">&times;</button>
+                            </div>
+                            <form class="camp-form">
+                                <div class="form-group">
+                                    <label>Camp Name *</label>
+                                    <input type="text" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Date *</label>
+                                        <input type="date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Start Time *</label>
+                                        <input type="time" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>End Time *</label>
+                                        <input type="time" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Location *</label>
+                                    <input type="text" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Total Slots *</label>
+                                        <input type="number" min="1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Slot Duration (minutes) *</label>
+                                        <input type="number" min="15" value="30" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea rows="3"></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Create Camp</button>
+                                    <button type="button" class="btn-secondary modal-close">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hospital Requests Section -->
+            <section id="requests" class="content-section">
+                <div class="requests-container">
+                    <h2>Hospital Blood Requests</h2>
+                    <div class="requests-tabs">
+                        <button class="tab-btn active" data-tab="pending">Pending (5)</button>
+                        <button class="tab-btn" data-tab="approved">Approved</button>
+                        <button class="tab-btn" data-tab="completed">Completed</button>
+                        <button class="tab-btn" data-tab="rejected">Rejected</button>
+                    </div>
+
+                    <div class="tab-content active" id="pending">
+                        <div class="requests-list">
+                            <div class="request-card emergency">
+                                <div class="request-header">
+                                    <div>
+                                        <h4>City Hospital</h4>
+                                        <span class="request-id">REQ-2026-001</span>
+                                    </div>
+                                    <span class="priority-badge emergency">Emergency</span>
+                                </div>
+                                <div class="request-body">
+                                    <div class="request-details">
+                                        <p><strong>Blood Type:</strong> O-</p>
+                                        <p><strong>Units Required:</strong> 4</p>
+                                        <p><strong>Purpose:</strong> Emergency Surgery</p>
+                                        <p><strong>Patient ID:</strong> PT-12345</p>
+                                        <p><strong>Requested:</strong> 30 minutes ago</p>
+                                        <p><strong>Required By:</strong> Immediately</p>
+                                    </div>
+                                    <div class="stock-check">
+                                        <p><strong>Available Stock:</strong> <span class="stock-low">5 units</span></p>
+                                        <p class="warning">⚠️ Limited stock available</p>
+                                    </div>
+                                </div>
+                                <div class="request-actions">
+                                    <button class="btn-primary">Approve Request</button>
+                                    <button class="btn-secondary">Contact Hospital</button>
+                                    <button class="btn-secondary">Find from Network</button>
+                                    <button class="btn-danger">Reject</button>
+                                </div>
+                            </div>
+
+                            <div class="request-card high">
+                                <div class="request-header">
+                                    <div>
+                                        <h4>District Hospital</h4>
+                                        <span class="request-id">REQ-2026-002</span>
+                                    </div>
+                                    <span class="priority-badge high">High Priority</span>
+                                </div>
+                                <div class="request-body">
+                                    <div class="request-details">
+                                        <p><strong>Blood Type:</strong> A+</p>
+                                        <p><strong>Units Required:</strong> 2</p>
+                                        <p><strong>Purpose:</strong> Scheduled Surgery</p>
+                                        <p><strong>Patient ID:</strong> PT-67890</p>
+                                        <p><strong>Requested:</strong> 2 hours ago</p>
+                                        <p><strong>Required By:</strong> Feb 10, 2026</p>
+                                    </div>
+                                    <div class="stock-check">
+                                        <p><strong>Available Stock:</strong> <span class="stock-good">245 units</span></p>
+                                    </div>
+                                </div>
+                                <div class="request-actions">
+                                    <button class="btn-primary">Approve Request</button>
+                                    <button class="btn-secondary">Contact Hospital</button>
+                                    <button class="btn-danger">Reject</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Donations Section -->
+            <section id="donations" class="content-section">
+                <div class="donations-container">
+                    <h2>Donation Records</h2>
+                    <div class="filters-bar">
+                        <input type="date" class="filter-input">
+                        <select class="filter-select">
+                            <option>All Blood Groups</option>
+                        </select>
+                        <input type="text" placeholder="Search donor..." class="search-input">
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Donor Name</th>
+                                    <th>Blood Group</th>
+                                    <th>Volume</th>
+                                    <th>Bag ID</th>
+                                    <th>Camp/Walk-in</th>
+                                    <th>Certificate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Feb 05, 2026</td>
+                                    <td>John Doe</td>
+                                    <td>O+</td>
+                                    <td>450 ml</td>
+                                    <td>BB-2026-0125</td>
+                                    <td>Walk-in</td>
+                                    <td><button class="btn-link">Generate</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blood Bank Network Section -->
+            <section id="network" class="content-section">
+                <div class="network-container">
+                    <h2>Blood Bank Network</h2>
+                    <p class="subtitle">Connect with other blood banks for emergency stock sharing</p>
+                    
+                    <div class="network-grid">
+                        <div class="network-card connected">
+                            <div class="network-header">
+                                <h4>District Blood Bank</h4>
+                                <span class="connection-badge">Connected</span>
+                            </div>
+                            <div class="network-body">
+                                <p><strong>Location:</strong> Coimbatore</p>
+                                <p><strong>Distance:</strong> 45 km</p>
+                                <p><strong>Contact:</strong> +91 98765-43210</p>
+                                <div class="stock-summary">
+                                    <span>O+: 150</span>
+                                    <span>O-: 25</span>
+                                    <span>A+: 120</span>
+                                    <span>B+: 95</span>
+                                </div>
+                            </div>
+                            <div class="network-actions">
+                                <button class="btn-secondary btn-sm">Request Blood</button>
+                                <button class="btn-secondary btn-sm">View Full Stock</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="content-section">
+                <div class="analytics-container">
+                    <h2>Analytics & Reports</h2>
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h3>Monthly Collection Trend</h3>
+                            <div class="chart-placeholder">
+                                📊 Chart showing monthly collections
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Blood Group Distribution</h3>
+                            <div class="chart-placeholder">
+                                📊 Pie chart showing distribution
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alerts Section -->
+            <section id="alerts" class="content-section">
+                <div class="alerts-container">
+                    <h2>Alerts & Notifications</h2>
+                    <div class="alerts-list">
+                        <div class="alert-card critical">
+                            <span class="alert-icon">🚨</span>
+                            <div class="alert-content">
+                                <h4>Critical Stock Level - O-</h4>
+                                <p>O- blood stock has fallen to 5 units (minimum threshold: 20 units)</p>
+                                <span class="alert-time">5 minutes ago</span>
+                                <button class="btn-primary btn-sm">Alert Donors</button>
+                            </div>
+                        </div>
+                        <div class="alert-card warning">
+                            <span class="alert-icon">⚠️</span>
+                            <div class="alert-content">
+                                <h4>Units Expiring Soon</h4>
+                                <p>28 units are expiring within the next 7 days</p>
+                                <span class="alert-time">1 hour ago</span>
+                                <button class="btn-secondary btn-sm">View List</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/dashboard-common.js"></script>
+    <script src="js/bank-dashboard.js"></script>
+</body>
+</html>

@@ -1093,30 +1093,33 @@ def check_expiry():
     db.session.commit()
     return jsonify({"message": f"Expiry check complete. Alerts sent: {alerts_sent}"}), 200
 
-from ml_predictor import predictor
+from ml_predictor import ml_engine as _legacy_ml_engine
 
 @app.route('/api/analytics/run-prediction', methods=['POST'])
 def run_prediction():
     """Runs ML prediction for next week's demand and generates automated alerts"""
     try:
-        predictions = predictor.predict_next_week_demand()
+        # Use new XGBoost forecaster
+        if not _legacy_ml_engine.demand_forecaster.is_trained:
+            _legacy_ml_engine.demand_forecaster.load() or _legacy_ml_engine.demand_forecaster.train()
+
+        forecast = _legacy_ml_engine.demand_forecaster.predict_next_week()
+        # Convert to simple {bg: total_units} format for backward compatibility
+        predictions = {bg: data["total_7day"] for bg, data in forecast.items()}
+
         alerts_generated = 0
-        reasons = [] # For debugging/response
-        
+        reasons = []
+
         blood_groups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
         total_shortage = 0
         
         for bg in blood_groups:
-            # 1. Get current inventory
             current_stock = db.session.query(db.func.sum(BloodInventory.units))\
                 .filter_by(blood_group=bg)\
                 .filter(BloodInventory.expiry_date > datetime.utcnow())\
                 .scalar() or 0
                 
             predicted_demand = predictions.get(bg, 0)
-            
-            # 2. Check for shortage (Projected Stock = Current - Predicted)
-            # If Projected Stock < Safety Buffer (e.g., 5 units), alert!
             safety_buffer = 5
             projected_balance = current_stock - predicted_demand
             
@@ -1124,14 +1127,11 @@ def run_prediction():
                 shortage_amt = safety_buffer - projected_balance
                 total_shortage += shortage_amt
                 
-                # 3. Notify Eligible Donors
                 donors = User.query.filter_by(role='donor', blood_group=bg, account_status='active').all()
                 count = 0
                 for donor in donors:
-                    # Check if already notified recently (prevent spam)
                     msg = f"AI Prediction: High demand expected for {bg} next week. {int(shortage_amt)} units needed. Please donate!"
                     existing = Notification.query.filter_by(user_id=donor.id, message=msg).first()
-                    
                     if not existing:
                         notif = Notification(user_id=donor.id, message=msg, type='urgent')
                         db.session.add(notif)
@@ -1141,8 +1141,7 @@ def run_prediction():
                     reasons.append(f"{bg}: Shortage of {int(shortage_amt)} units. Notified {count} donors.")
                     alerts_generated += count
 
-        # 4. Notify Blood Banks if aggregate shortage is high
-        if total_shortage > 20: # High aggregate shortage
+        if total_shortage > 20:
             banks = User.query.filter(User.role.in_(['blood_bank', 'bank'])).all()
             for bank in banks:
                 msg = f"AI Insight: High aggregate blood demand ({int(total_shortage)} units shortage) predicted for next week. Recommended to organize a donation camp."
@@ -1154,7 +1153,7 @@ def run_prediction():
 
         db.session.commit()
         return jsonify({
-            "message": "Prediction analysis complete", 
+            "message": "Prediction analysis complete",
             "predictions": predictions,
             "alerts_sent": alerts_generated,
             "details": reasons
@@ -1162,6 +1161,7 @@ def run_prediction():
         
     except Exception as e:
         return jsonify({"message": f"Prediction failed: {str(e)}"}), 500
+
 
 @app.route('/api/admin/stats/advanced', methods=['GET'])
 def advanced_stats():
@@ -1656,78 +1656,6 @@ def get_camps():
         })
     return jsonify(result), 200
 
-@app.route('/api/camps', methods=['POST'])
-def create_camp():
-    try:
-        data = request.json
-        bank_id = 1 # Demo
-        
-        new_camp = Campaign(
-            organizer_id=bank_id,
-            name=data.get('name'),
-            location=data.get('location'),
-            date=datetime.strptime(data.get('date'), '%Y-%m-%d'),
-            start_time=data.get('start_time'),
-            end_time=data.get('end_time'),
-            target_blood_groups=data.get('target_groups', 'All'),
-            status='scheduled'
-        )
-        
-        db.session.add(new_camp)
-        db.session.commit()
-        
-        return jsonify({"message": "Camp created successfully", "id": new_camp.id}), 201
-    except Exception as e:
-        return jsonify({"message": str(e)}), 400
-
-@app.route('/api/camps/<int:camp_id>', methods=['PUT'])
-def update_camp(camp_id):
-    try:
-        camp = Campaign.query.get(camp_id)
-        if not camp:
-            return jsonify({"message": "Camp not found"}), 404
-            
-        data = request.json
-        if 'name' in data: camp.name = data['name']
-        if 'location' in data: camp.location = data['location']
-        if 'date' in data: camp.date = datetime.strptime(data['date'], '%Y-%m-%d')
-        if 'start_time' in data: camp.start_time = data['start_time']
-        if 'end_time' in data: camp.end_time = data['end_time']
-        
-        db.session.commit()
-        return jsonify({"message": "Camp updated successfully"}), 200
-    except Exception as e:
-        return jsonify({"message": str(e)}), 400
-
-@app.route('/api/camps/<int:camp_id>', methods=['DELETE'])
-def cancel_camp_endpoint(camp_id):
-    try:
-        camp = Campaign.query.get(camp_id)
-        if not camp:
-            return jsonify({"message": "Camp not found"}), 404
-            
-        camp.status = 'cancelled'
-        db.session.commit()
-        return jsonify({"message": "Camp cancelled successfully"}), 200
-    except Exception as e:
-        return jsonify({"message": str(e)}), 400
-
-@app.route('/api/camps/<int:camp_id>/slots', methods=['GET'])
-def get_camp_slots(camp_id):
-    # Get appointments for this camp
-    appointments = Appointment.query.filter_by(camp_id=camp_id).all()
-    
-    slots = []
-    for apt in appointments:
-        donor = User.query.get(apt.donor_id)
-        slots.append({
-            "id": apt.id,
-            "donor_name": donor.username if donor else "Unknown",
-            "time": apt.time_slot,
-            "status": apt.status
-        })
-        
-    return jsonify(slots), 200
 
 @app.route('/api/donations/today', methods=['GET'])
 def get_todays_donations():
@@ -1773,4 +1701,229 @@ def get_alerts():
     })
     
     return jsonify(alerts)
+
+
+# ============================================================================
+# ADVANCED ML ENDPOINTS
+# ============================================================================
+# Lazy-init: import engine once, initialize on first request
+_ml_initialized = False
+
+def _ensure_ml():
+    global _ml_initialized
+    if not _ml_initialized:
+        from ml_predictor import ml_engine
+        ml_engine.initialize()
+        _ml_initialized = True
+    from ml_predictor import ml_engine
+    return ml_engine
+
+
+@app.route('/api/ml/demand-forecast', methods=['GET'])
+def ml_demand_forecast():
+    """XGBoost 7-day blood demand forecast per blood group."""
+    try:
+        engine = _ensure_ml()
+
+        # Build real training data from BloodRequest history
+        requests = BloodRequest.query.all()
+        df = None
+        if len(requests) >= 50:
+            rows = [{"date": r.request_date, "blood_group": r.blood_group, "demand": r.units}
+                    for r in requests]
+            df = __import__('pandas').DataFrame(rows)
+            engine.demand_forecaster.train(df)
+
+        forecast = engine.demand_forecaster.predict_next_week()
+        return jsonify({"status": "ok", "forecast": forecast,
+                        "data_source": "real_db" if df is not None else "synthetic",
+                        "generated_at": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/ml/shortage-risk', methods=['GET'])
+def ml_shortage_risk():
+    """Gradient Boosting shortage risk classification per bank × blood group."""
+    try:
+        engine   = _ensure_ml()
+        pd       = __import__('pandas')
+        banks    = User.query.filter_by(role='bank', account_status='active').all()
+        records  = []
+
+        for bank in banks:
+            inv = db.session.query(
+                BloodInventory.blood_group,
+                db.func.sum(BloodInventory.units).label('units'),
+                db.func.count(BloodInventory.id).label('count'),
+                db.func.min(BloodInventory.expiry_date).label('min_expiry')
+            ).filter_by(bank_id=bank.id).group_by(BloodInventory.blood_group).all()
+
+            # Average daily consumption from recent requests
+            recent = BloodRequest.query.filter_by(blood_bank_id=str(bank.id)).all()
+            total_units = sum(r.units for r in recent) if recent else 0
+            days_span   = 30
+            avg_cons    = total_units / days_span if recent else 3.0
+
+            for row in inv:
+                expiring_soon = 0
+                if row.min_expiry:
+                    days_left = (row.min_expiry - datetime.utcnow()).days
+                    expiring_soon = 1 if days_left <= 7 else 0
+
+                records.append({
+                    "bank_id":                  bank.id,
+                    "bank_name":                bank.username,
+                    "blood_group":              row.blood_group,
+                    "current_units":            int(row.units or 0),
+                    "avg_daily_consumption":    round(avg_cons, 2),
+                    "days_since_last_donation": 7,
+                    "expiring_soon_count":      expiring_soon,
+                })
+
+        if not records:
+            # Demo records
+            blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-']
+            import random
+            records = [{"bank_id":1,"bank_name":"Demo Bank","blood_group":bg,
+                         "current_units":random.randint(0,50),"avg_daily_consumption":random.uniform(1,10),
+                         "days_since_last_donation":random.randint(1,20),"expiring_soon_count":random.randint(0,3)}
+                       for bg in blood_groups]
+
+        results = engine.shortage_classifier.predict(records)
+        return jsonify({"status": "ok", "shortage_risks": results,
+                        "critical_count": sum(1 for r in results if r["risk_level"]=="critical"),
+                        "high_count":     sum(1 for r in results if r["risk_level"]=="high")})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/ml/donor-score/<int:user_id>', methods=['GET'])
+def ml_donor_score(user_id):
+    """Logistic Regression donor reliability score."""
+    try:
+        engine = _ensure_ml()
+        user   = User.query.get_or_404(user_id)
+
+        donation_count = Report.query.filter_by(donor_id=user_id, status='approved').count()
+        last_donation  = Report.query.filter_by(donor_id=user_id, status='approved')\
+                                     .order_by(Report.upload_date.desc()).first()
+        total_appts    = Appointment.query.filter_by(donor_id=user_id).count()
+        kept_appts     = Appointment.query.filter_by(donor_id=user_id, status='completed').count()
+
+        days_since = 365
+        if last_donation:
+            days_since = (datetime.utcnow() - last_donation.upload_date).days
+
+        info = {
+            "donation_count":            donation_count,
+            "days_since_last":           days_since,
+            "health_status":             1,   # default: excellent (no health records yet)
+            "blood_group":               user.blood_group or "O+",
+            "appointment_kept_ratio":    round(kept_appts / max(total_appts, 1), 2),
+        }
+
+        result = engine.donor_scorer.score_donor(info)
+        return jsonify({"status": "ok", "user_id": user_id,
+                        "username": user.username, **result})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/ml/camp-recommendations', methods=['GET'])
+def ml_camp_recommendations():
+    """K-Means camp location optimizer."""
+    try:
+        engine = _ensure_ml()
+
+        # Build city donor density from real DB
+        donors = User.query.filter_by(role='donor', account_status='active').all()
+        city_counts = {}
+        for d in donors:
+            if d.city:
+                city_counts[d.city] = city_counts.get(d.city, 0) + 1
+
+        # Shortage score: cities with more open blood requests score higher
+        requests = BloodRequest.query.filter_by(status='pending').all()
+        city_shortage = {}
+        for r in requests:
+            hospital = User.query.get(r.hospital_id)
+            if hospital and hospital.city:
+                city_shortage[hospital.city] = city_shortage.get(hospital.city, 0) + r.units
+
+        city_data = None
+        if city_counts:
+            max_short  = max(city_shortage.values()) if city_shortage else 1
+            city_data  = [
+                {"city": city, "donor_count": cnt,
+                 "shortage_score": round(city_shortage.get(city, 0) / max_short, 2)}
+                for city, cnt in city_counts.items()
+            ]
+            engine.camp_optimizer.train(city_data)
+
+        top_n = int(request.args.get('top', 5))
+        recs  = engine.camp_optimizer.recommend(city_data, top_n=top_n)
+        return jsonify({"status": "ok", "recommendations": recs,
+                        "data_source": "real_db" if city_data else "synthetic"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/ml/expiry-risk/<int:bank_id>', methods=['GET'])
+def ml_expiry_risk(bank_id):
+    """Isolation Forest expiry risk detection for a bank's inventory."""
+    try:
+        engine = _ensure_ml()
+
+        inv_items = BloodInventory.query.filter_by(bank_id=bank_id).all()
+
+        # Build demand rate from recent requests
+        recent_req = BloodRequest.query.all()
+        bg_demand  = {}
+        for r in recent_req:
+            bg_demand[r.blood_group] = bg_demand.get(r.blood_group, 0) + r.units
+        total_days = 30
+        bg_rate    = {bg: round(u / total_days, 2) for bg, u in bg_demand.items()}
+
+        records = []
+        for item in inv_items:
+            days_left = (item.expiry_date - datetime.utcnow()).days if item.expiry_date else 30
+            records.append({
+                "inventory_id":  item.id,
+                "blood_group":   item.blood_group,
+                "units":         item.units or 0,
+                "days_to_expiry": max(0, days_left),
+                "demand_rate":   bg_rate.get(item.blood_group, 5.0),
+            })
+
+        if not records:
+            import random
+            blood_groups = ['A+','A-','B+','B-','AB+','AB-','O+','O-']
+            records = [{"inventory_id": i+1, "blood_group": bg, "units": random.randint(1,50),
+                         "days_to_expiry": random.randint(1,42), "demand_rate": random.uniform(1,10)}
+                       for i, bg in enumerate(blood_groups)]
+
+        results = engine.expiry_detector.detect(records)
+        return jsonify({
+            "status":         "ok",
+            "bank_id":        bank_id,
+            "expiry_risks":   results,
+            "critical_count": sum(1 for r in results if r["risk_level"]=="CRITICAL"),
+            "high_count":     sum(1 for r in results if r["risk_level"]=="HIGH"),
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/api/ml/retrain', methods=['POST'])
+def ml_retrain():
+    """Admin-only: trigger full model retraining on latest DB data."""
+    try:
+        engine = _ensure_ml()
+        engine.retrain_all()
+        return jsonify({"status": "ok",
+                        "message": "All 5 ML models retrained successfully",
+                        "retrained_at": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 

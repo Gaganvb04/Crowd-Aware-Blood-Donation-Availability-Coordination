@@ -483,6 +483,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 grid.innerHTML = '';
                 const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+                const criticalGroups = [];
 
                 bloodGroups.forEach(bg => {
                     const units = data[bg] || 0;
@@ -490,11 +491,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     let statusLabel = 'Good Stock';
                     let width = '80%';
 
-                    if (units < 10) {
+                    if (units < 5) {
                         statusClass = 'status-critical';
                         statusLabel = 'Critical';
                         width = '10%';
-                    } else if (units < 30) {
+                        criticalGroups.push({ group: bg, units: units });
+                    } else if (units < 15) {
                         statusClass = 'status-low';
                         statusLabel = 'Low Stock';
                         width = '35%';
@@ -514,6 +516,47 @@ document.addEventListener('DOMContentLoaded', function () {
                     `;
                     grid.appendChild(card);
                 });
+
+                // Dynamically handle critical alert banner
+                const banner = document.getElementById('criticalAlertBanner');
+                const alertText = document.getElementById('criticalAlertText');
+                const alertBtn = document.getElementById('criticalAlertBtn');
+
+                if (banner && alertText) {
+                    if (criticalGroups.length > 0) {
+                        // Find the one with lowest stock
+                        criticalGroups.sort((a, b) => a.units - b.units);
+                        const mostCritical = criticalGroups[0];
+                        
+                        alertText.innerHTML = `<strong>Critical Alert:</strong> ${mostCritical.group} blood stock below safety level (${mostCritical.units} units remaining)`;
+                        banner.style.display = 'flex';
+
+                        if (alertBtn) {
+                            alertBtn.onclick = function() {
+                                alertBtn.disabled = true;
+                                alertBtn.textContent = 'Sending...';
+                                fetch('/api/analytics/run-prediction', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' }
+                                })
+                                .then(res => res.json())
+                                .then(resData => {
+                                    alert('Alerts sent successfully to eligible donors!');
+                                    alertBtn.disabled = false;
+                                    alertBtn.textContent = 'Send Alert to Donors';
+                                })
+                                .catch(err => {
+                                    console.error('Error sending alerts:', err);
+                                    alert('Failed to send alerts.');
+                                    alertBtn.disabled = false;
+                                    alertBtn.textContent = 'Send Alert to Donors';
+                                });
+                            };
+                        }
+                    } else {
+                        banner.style.display = 'none';
+                    }
+                }
             })
             .catch(err => {
                 console.error('Error loading inventory:', err);

@@ -80,11 +80,11 @@
             <!-- Overview Section -->
             <section id="overview" class="content-section active">
                 <!-- Critical Alerts -->
-                <div class="alert-banner critical">
+                <div class="alert-banner critical" id="criticalAlertBanner" style="display: none;">
                     <span class="alert-icon">⚠️</span>
                     <div class="alert-content">
-                        <strong>Critical Alert:</strong> O- blood stock below safety level (5 units remaining)
-                        <button class="btn-sm btn-light">Send Alert to Donors</button>
+                        <span id="criticalAlertText"><strong>Critical Alert:</strong> O- blood stock below safety level (5 units remaining)</span>
+                        <button class="btn-sm btn-light" id="criticalAlertBtn">Send Alert to Donors</button>
                     </div>
                 </div>
 

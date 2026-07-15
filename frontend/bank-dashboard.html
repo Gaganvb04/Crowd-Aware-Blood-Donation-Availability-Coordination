@@ -266,7 +266,7 @@
 
                     <!-- Filters -->
                     <div class="filters-bar">
-                        <select class="filter-select">
+                        <select class="filter-select" id="inventoryGroupFilter" onchange="toggleCustomBloodGroup(this, 'inventoryGroupFilterManual')">
                             <option value="">All Blood Groups</option>
                             <option value="A+">A+</option>
                             <option value="A-">A-</option>
@@ -276,7 +276,10 @@
                             <option value="AB-">AB-</option>
                             <option value="O+">O+</option>
                             <option value="O-">O-</option>
+                            <option value="Other">Other (specify)</option>
                         </select>
+                        <input type="text" id="inventoryGroupFilterManual" class="search-input" style="display: none; max-width: 180px;" placeholder="Type blood group">
+                        
                         <select class="filter-select">
                             <option value="">All Status</option>
                             <option value="available">Available</option>

@@ -142,24 +142,34 @@ document.addEventListener('DOMContentLoaded', function () {
     let localInventoryData = [];
 
     // Bind event listeners for inventory filtering
-    const filterSelects = document.querySelectorAll('.filters-bar .filter-select');
-    const searchInput = document.querySelector('.filters-bar .search-input');
+    const inventoryGroupFilter = document.getElementById('inventoryGroupFilter');
+    const inventoryGroupFilterManual = document.getElementById('inventoryGroupFilterManual');
+    const inventoryStatusFilter = document.querySelectorAll('.inventory-container .filters-bar .filter-select')[1];
+    const inventorySearchInput = document.querySelectorAll('.inventory-container .filters-bar .search-input')[1];
 
-    if (filterSelects.length >= 2) {
-        filterSelects[0].addEventListener('change', renderFilteredInventory);
-        filterSelects[1].addEventListener('change', renderFilteredInventory);
+    if (inventoryGroupFilter) {
+        inventoryGroupFilter.addEventListener('change', renderFilteredInventory);
     }
-    if (searchInput) {
-        searchInput.addEventListener('input', renderFilteredInventory);
+    if (inventoryGroupFilterManual) {
+        inventoryGroupFilterManual.addEventListener('input', renderFilteredInventory);
+    }
+    if (inventoryStatusFilter) {
+        inventoryStatusFilter.addEventListener('change', renderFilteredInventory);
+    }
+    if (inventorySearchInput) {
+        inventorySearchInput.addEventListener('input', renderFilteredInventory);
     }
 
     function renderFilteredInventory() {
         const tbody = document.getElementById('inventoryTableBody');
         if (!tbody) return;
 
-        const groupVal = filterSelects.length >= 1 ? filterSelects[0].value.toLowerCase() : '';
-        const statusVal = filterSelects.length >= 2 ? filterSelects[1].value.toLowerCase() : '';
-        const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        let groupVal = inventoryGroupFilter ? inventoryGroupFilter.value.toLowerCase() : '';
+        if (groupVal === 'other') {
+            groupVal = inventoryGroupFilterManual ? inventoryGroupFilterManual.value.toLowerCase().trim() : '';
+        }
+        const statusVal = inventoryStatusFilter ? inventoryStatusFilter.value.toLowerCase() : '';
+        const searchVal = inventorySearchInput ? inventorySearchInput.value.toLowerCase().trim() : '';
 
         const filtered = localInventoryData.filter(item => {
             const matchesGroup = !groupVal || item.blood_group.toLowerCase() === groupVal;
@@ -541,6 +551,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             opt.textContent = bg;
                             select.appendChild(opt);
                         });
+                        // Append Other option
+                        const otherOpt = document.createElement('option');
+                        otherOpt.value = 'Other';
+                        otherOpt.textContent = 'Other (specify)';
+                        select.appendChild(otherOpt);
+
                         select.value = currentVal;
                     }
                 });

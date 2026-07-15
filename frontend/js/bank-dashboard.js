@@ -127,6 +127,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Data Loading Functions ---
 
+    let localInventoryData = [];
+
+    // Bind event listeners for inventory filtering
+    const filterSelects = document.querySelectorAll('.filters-bar .filter-select');
+    const searchInput = document.querySelector('.filters-bar .search-input');
+
+    if (filterSelects.length >= 2) {
+        filterSelects[0].addEventListener('change', renderFilteredInventory);
+        filterSelects[1].addEventListener('change', renderFilteredInventory);
+    }
+    if (searchInput) {
+        searchInput.addEventListener('input', renderFilteredInventory);
+    }
+
+    function renderFilteredInventory() {
+        const tbody = document.getElementById('inventoryTableBody');
+        if (!tbody) return;
+
+        const groupVal = filterSelects.length >= 1 ? filterSelects[0].value.toLowerCase() : '';
+        const statusVal = filterSelects.length >= 2 ? filterSelects[1].value.toLowerCase() : '';
+        const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+        const filtered = localInventoryData.filter(item => {
+            const matchesGroup = !groupVal || item.blood_group.toLowerCase() === groupVal;
+            const matchesStatus = !statusVal || item.status.toLowerCase() === statusVal || item.status_class.toLowerCase() === statusVal;
+            const matchesSearch = !searchVal || item.bag_id.toLowerCase().includes(searchVal);
+            return matchesGroup && matchesStatus && matchesSearch;
+        });
+
+        tbody.innerHTML = '';
+        filtered.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.bag_id}</td>
+                <td><span class="blood-type">${item.blood_group}</span></td>
+                <td>${item.volume}</td>
+                <td>${item.collection_date}</td>
+                <td>${item.expiry_date}</td>
+                <td><span class="status-badge ${item.status_class}">${item.status}</span></td>
+                <td><button class="btn-link" onclick="alert('QR Code: ${item.bag_id}')">View QR</button></td>
+                <td>
+                    <button class="btn-icon" title="Edit" onclick="alert('Edit ${item.bag_id}')">✏️</button>
+                    <button class="btn-icon" title="Reserve" onclick="alert('Reserve ${item.bag_id}')">📌</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:1.5rem;">No matching inventory records found.</td></tr>';
+        }
+    }
+
     function loadDetailedInventory(bankId) {
         const tbody = document.getElementById('inventoryTableBody');
         if (!tbody) return;
@@ -134,29 +187,8 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(`/api/bank/inventory/details/${bankId}`)
             .then(res => res.json())
             .then(data => {
-                tbody.innerHTML = '';
-                data.forEach(item => {
-                    const tr = document.createElement('tr');
-
-                    tr.innerHTML = `
-                        <td>${item.bag_id}</td>
-                        <td><span class="blood-type">${item.blood_group}</span></td>
-                        <td>${item.volume}</td>
-                        <td>${item.collection_date}</td>
-                        <td>${item.expiry_date}</td>
-                        <td><span class="status-badge ${item.status_class}">${item.status}</span></td>
-                        <td><button class="btn-link" onclick="alert('QR Code: ${item.bag_id}')">View QR</button></td>
-                        <td>
-                            <button class="btn-icon" title="Edit" onclick="alert('Edit ${item.bag_id}')">✏️</button>
-                            <button class="btn-icon" title="Reserve" onclick="alert('Reserve ${item.bag_id}')">📌</button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No inventory records found.</td></tr>';
-                }
+                localInventoryData = data;
+                renderFilteredInventory();
             })
             .catch(err => {
                 console.error('Error loading detailed inventory:', err);

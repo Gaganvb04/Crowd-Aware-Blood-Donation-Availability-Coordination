@@ -965,3 +965,52 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+
+/* ==========================================================================
+   FILTERS BAR STYLING
+   ========================================================================== */
+.filters-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 14px 20px;
+    border-radius: var(--radius-sm, 8px);
+    border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.08));
+}
+
+.filters-bar .filter-select,
+.filters-bar .search-input {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.12));
+    color: var(--text-primary, #fff);
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filters-bar .filter-select {
+    cursor: pointer;
+    min-width: 170px;
+}
+
+.filters-bar .filter-select option {
+    background: #111;
+    color: #fff;
+}
+
+.filters-bar .search-input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filters-bar .filter-select:focus,
+.filters-bar .search-input:focus {
+    border-color: var(--red-primary, #e53e3e);
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.12);
+}
+

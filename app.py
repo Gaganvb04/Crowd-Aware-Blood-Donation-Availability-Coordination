@@ -841,6 +841,38 @@ def get_bank_inventory(bank_id):
         
     return jsonify(result), 200
 
+@app.route('/api/bank/inventory/report/<int:bank_id>', methods=['GET'])
+def generate_inventory_report(bank_id):
+    """Generates a CSV report of the bank's current inventory"""
+    import csv
+    import io
+    from flask import make_response
+    
+    inventory = BloodInventory.query.filter_by(bank_id=bank_id).order_by(BloodInventory.expiry_date).all()
+    
+    dest = io.StringIO()
+    writer = csv.writer(dest)
+    
+    # Write CSV header
+    writer.writerow(["Bag ID", "Blood Group", "Volume (ml)", "Collection Date", "Expiry Date", "Status"])
+    
+    # Write inventory rows
+    for item in inventory:
+        bag_id = item.bag_id or f"BB-{item.added_date.year if item.added_date else 2026}-{item.id:04d}"
+        writer.writerow([
+            bag_id,
+            item.blood_group,
+            item.volume or 450,
+            item.added_date.strftime('%Y-%m-%d') if item.added_date else 'N/A',
+            item.expiry_date.strftime('%Y-%m-%d') if item.expiry_date else 'N/A',
+            item.status or 'available'
+        ])
+        
+    output = make_response(dest.getvalue())
+    output.headers["Content-Disposition"] = f"attachment; filename=blood_inventory_report_{bank_id}.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
+
 @app.route('/api/notifications/<int:user_id>', methods=['GET'])
 def get_notifications(user_id):
     """Get notifications for a user"""

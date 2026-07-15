@@ -26,6 +26,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Wiring up Generate Report Button
+    const generateReportBtn = document.getElementById('generateReportBtn');
+    if (generateReportBtn) {
+        generateReportBtn.addEventListener('click', () => {
+            const bankId = localStorage.getItem('user_id');
+            if (bankId) {
+                window.location.href = `/api/bank/inventory/report/${bankId}`;
+            } else {
+                alert('Session expired. Please log in again.');
+            }
+        });
+    }
+
     const addStockForm = document.getElementById('addStockForm');
     if (addStockForm) {
         addStockForm.addEventListener('submit', function (e) {

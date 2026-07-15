@@ -101,7 +101,7 @@ class BloodInventory(db.Model):
     added_date = db.Column(db.DateTime, name='collection_date', default=datetime.utcnow)
     
     # Additional helper mappings for database fields
-    bag_id = db.Column(db.String(50), default=lambda: f"BAG-{int(datetime.utcnow().timestamp())}")
+    bag_id = db.Column(db.String(50), default=lambda: f"BAG-{__import__('uuid').uuid4().hex[:10].upper()}")
     volume = db.Column(db.Integer, default=450)
     status = db.Column(db.String(20), default='available')
     
@@ -945,12 +945,14 @@ def update_inventory():
             expiry_date = datetime.strptime(expiry_date_str, '%Y-%m-%d')
             
             # Create individual records for each unit to simulate unique "Bag IDs"
+            import uuid
             for _ in range(units):
                 new_stock = BloodInventory(
                     bank_id=bank_id,
                     blood_group=blood_group,
                     units=1,
-                    expiry_date=expiry_date
+                    expiry_date=expiry_date,
+                    bag_id=f"BAG-{uuid.uuid4().hex[:10].upper()}"
                 )
                 db.session.add(new_stock)
         else:

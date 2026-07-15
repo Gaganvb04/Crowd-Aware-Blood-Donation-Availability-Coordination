@@ -20,7 +20,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (nav.dataset.section === sectionId) {
                 nav.classList.add('active');
                 if (pageTitle) {
-                    pageTitle.textContent = nav.textContent.trim().split('\n')[0].trim();
+                    let titleText = '';
+                    const iconSpan = nav.querySelector('.icon');
+                    if (iconSpan) {
+                        titleText = nav.textContent.replace(iconSpan.textContent, '').trim();
+                    } else {
+                        titleText = nav.textContent.trim();
+                    }
+                    // Extract only the main header title text (removing badge count numbers if present)
+                    pageTitle.textContent = titleText.replace(/\d+/g, '').trim();
                 }
             }
         });

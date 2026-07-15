@@ -54,6 +54,11 @@ document.addEventListener('DOMContentLoaded', function () {
             // Get form data
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
+            
+            // Handle custom blood group
+            if ((data.blood_group === 'other' || data.blood_group === 'Other') && data.custom_blood_group) {
+                formData.set('blood_group', data.custom_blood_group);
+            }
 
             // Validate password match
             if (data.password !== data.confirm_password) {

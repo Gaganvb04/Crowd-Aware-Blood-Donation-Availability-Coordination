@@ -17,7 +17,7 @@ CORS(app)  # Enable CORS for all routes
 # Default MySQL local connection. Password is usually empty for Homebrew installs.
 basedir = os.path.abspath(os.path.dirname(__file__))
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database', 'blood_donation.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:likith07@localhost/bloodconnect'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Face%40123@localhost/bloodconnect'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'uploads')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max limit
@@ -163,13 +163,30 @@ def get_donor_stats(user_id):
     if donation_count > 10: achievement = "Gold"
     if donation_count > 20: achievement = "Platinum"
     
+    # Calculate a dynamic impact breakdown based on total lives saved
+    # For demo purposes, we distribute it
+    emergency_cases = int(lives_saved * 0.35)
+    surgeries = int(lives_saved * 0.23)
+    cancer_patients = lives_saved - emergency_cases - surgeries
+    
+    if lives_saved == 0:
+        # Default placeholder if no donations yet
+        emergency_cases = 0
+        surgeries = 0
+        cancer_patients = 0
+    
     return jsonify({
         "total_donations": donation_count,
         "lives_saved": lives_saved,
         "next_eligible_date": next_eligible_date,
         "days_remaining": days_remaining,
-        "achievement_level": achievement
-    })
+        "achievement_level": achievement,
+        "impact_breakdown": {
+            "emergency_cases": emergency_cases,
+            "surgeries": surgeries,
+            "cancer_patients": cancer_patients
+        }
+    }), 200
 
 @app.route('/api/campaigns', methods=['GET'])
 def get_campaigns():
@@ -756,8 +773,11 @@ def get_bank_stats(bank_id):
             
         return jsonify({
             "total_units": int(total_units),
+            "total_units_change_percent": 0, # Placeholder, no historical unit data available yet
             "todays_collections": int(todays_units),
+            "collections_target": 50, # Dynamic target placeholder
             "pending_requests": pending_requests,
+            "urgent_requests": BloodRequest.query.filter_by(blood_bank_id=str(bank_id), status='pending', priority='emergency').count(),
             "expiring_soon": int(expiring)
         }), 200
     except Exception as e:
@@ -1256,14 +1276,32 @@ def get_hospital_stats(hospital_id):
             BloodRequest.request_date >= first_day_of_month
         ).scalar() or 0
         
+        # Get fulfilled requests last month to calculate percentage
+        first_day_of_last_month = (first_day_of_month - timedelta(days=1)).replace(day=1)
+        fulfilled_last_month = BloodRequest.query.filter(
+            BloodRequest.hospital_id == hospital_id,
+            BloodRequest.status == 'completed',
+            BloodRequest.request_date >= first_day_of_last_month,
+            BloodRequest.request_date < first_day_of_month
+        ).count()
+        
+        if fulfilled_last_month > 0:
+            fulfilled_change_percent = ((fulfilled_this_month - fulfilled_last_month) / fulfilled_last_month) * 100
+        else:
+            fulfilled_change_percent = 0 if fulfilled_this_month == 0 else 100
+            
         # Calculate average response time (simplified - using hours)
-        avg_response_time = 24  # Default 24 hours
+        avg_response_time = 0  # 0 indicates no data
+        response_time_change = 0 # No historical data to calculate this yet
         
         stats = {
             'active_requests': active_requests,
+            'pending_approval': active_requests, # All active are pending in this setup
             'fulfilled_this_month': fulfilled_this_month,
             'units_received': int(units_received),
-            'avg_response_time': avg_response_time
+            'avg_response_time': avg_response_time,
+            'fulfilled_change_percent': round(fulfilled_change_percent),
+            'response_time_change': response_time_change
         }
         
         return jsonify(stats), 200

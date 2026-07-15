@@ -30,19 +30,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const targetTab = document.getElementById(tabId);
         if (targetTab) targetTab.classList.add('active');
 
-        // Find the button that calls this function (tricky without event, so we use logic or just leave button active state management to the user click)
-        // Actually, we can just find the button by its onclick attribute or text, but better to match by logic
-        // For simplicity:
         const btns = document.querySelectorAll('.nav-btn');
         btns.forEach(btn => {
-            if (btn.getAttribute('onclick').includes(tabId)) {
+            if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId)) {
                 btn.classList.add('active');
             }
         });
 
-        if (tabId === 'analytics') {
-            loadAnalytics();
-        }
+        if (tabId === 'analytics') loadAnalytics();
+        if (tabId === 'donors') loadDonorUsers();
+        if (tabId === 'hospitals') loadUsers('hospital', 'hospitalsList');
+        if (tabId === 'banks') loadUsers('blood_bank', 'banksList');
+        if (tabId === 'bloodRequests') loadBloodRequests();
     };
 
     // Initialize defaults if needed
@@ -163,9 +162,113 @@ function loadAnalytics() {
 }
 
 function loadAllVerifications() {
-    loadReports(); // Donors Tab
-    loadUsers('hospital', 'hospitalsList'); // Hospitals Tab
-    loadUsers('blood_bank', 'banksList'); // Banks Tab
+    loadReports();           // Donors who uploaded docs
+    loadDonorUsers();        // All pending donor accounts (no doc needed)
+    loadUsers('hospital', 'hospitalsList');
+    loadUsers('blood_bank', 'banksList');
+}
+
+// Load donors for the Donors tab
+function loadDonorUsers() {
+    const list = document.getElementById('allDonorsList');
+    const statusFilter = document.getElementById('verificationFilter') ?
+        document.getElementById('verificationFilter').value : 'all';
+
+    if (list) list.innerHTML = '<p style="color:#a0aec0">Loading...</p>';
+
+    fetch('/api/users?role=donor')
+        .then(res => res.json())
+        .then(users => {
+            // Update pending count stat
+            const pendingDonors = users.filter(u => u.account_status === 'pending').length;
+            dashboardStats.donors = pendingDonors;
+            updateGlobalStats();
+
+            // Update stat card
+            const el = document.getElementById('pendingCount2');
+            const total = (dashboardStats.donors || 0) + (dashboardStats.hospitals || 0) + (dashboardStats.banks || 0);
+            if (el) el.textContent = total;
+
+            const totalEl = document.getElementById('totalDonorsCount');
+            if (totalEl) totalEl.textContent = users.length;
+
+            // Filter
+            const filtered = users.filter(u => {
+                if (statusFilter === 'all') return true;
+                const target = statusFilter === 'approved' ? 'active' : statusFilter;
+                return u.account_status === target;
+            });
+
+            // Render in Donors tab
+            if (list) {
+                list.innerHTML = '';
+                if (filtered.length === 0) {
+                    list.innerHTML = '<p style="color:#a0aec0">No donors found.</p>';
+                    return;
+                }
+                filtered.forEach(user => {
+                    const card = document.createElement('div');
+                    card.className = 'report-card';
+                    card.innerHTML = `
+                    <div class="report-info">
+                        <h4>${user.username}</h4>
+                        <div class="report-meta">
+                            <p><strong>Email:</strong> ${user.email}</p>
+                            <p><strong>Phone:</strong> ${user.phone || 'N/A'} | <strong>Blood Group:</strong> ${user.donation_type || 'N/A'}</p>
+                            <p><strong>Status:</strong> <span class="status-badge ${user.account_status}">${user.account_status}</span></p>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn-primary btn-sm" onclick="viewDetails('hospital', ${JSON.stringify(user).replace(/"/g, '&quot;')})">View Details</button>
+                    </div>`;
+                    list.appendChild(card);
+                });
+            }
+
+            // Also inject pending donors into the verifications tab
+            injectPendingDonorsIntoVerifications(users.filter(u => u.account_status === 'pending'));
+        })
+        .catch(err => {
+            console.error('Error loading donors:', err);
+            if (list) list.innerHTML = '<p style="color:#a0aec0">Error loading donors.</p>';
+        });
+}
+
+function injectPendingDonorsIntoVerifications(pendingDonors) {
+    // Only inject if verifications tab is active and there are pending donors (no report)
+    const verList = document.getElementById('reportsList');
+    if (!verList || pendingDonors.length === 0) return;
+
+    // Remove any previously injected donor-user cards
+    verList.querySelectorAll('.donor-user-card').forEach(c => c.remove());
+
+    // Add a sub-header for account approvals
+    if (pendingDonors.length > 0) {
+        const header = document.createElement('h3');
+        header.className = 'donor-user-card';
+        header.style.cssText = 'font-size:0.78rem;color:#fc8181;text-transform:uppercase;letter-spacing:1px;margin:20px 0 10px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;';
+        header.textContent = `⏳ Pending Donor Accounts (${pendingDonors.length})`;
+        verList.appendChild(header);
+
+        pendingDonors.forEach(user => {
+            const card = document.createElement('div');
+            card.className = 'report-card donor-user-card';
+            card.innerHTML = `
+            <div class="report-info">
+                <h4>👤 ${user.username}</h4>
+                <div class="report-meta">
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
+                    <p><strong>Status:</strong> <span class="status-badge pending">pending account</span></p>
+                </div>
+            </div>
+            <div class="report-actions">
+                <button class="btn-danger btn-sm" onclick="verifyUser(${user.id}, 'reject')">Reject</button>
+                <button class="btn-primary btn-sm" onclick="verifyUser(${user.id}, 'approve')">Approve</button>
+            </div>`;
+            verList.appendChild(card);
+        });
+    }
 }
 
 function loadReports() {
@@ -373,7 +476,7 @@ function viewDetails(type, data) {
 
     modalBody.innerHTML = content;
     modalFooter.innerHTML = actions + `<button class="btn-secondary" onclick="closeModal()">Close</button>`;
-    modal.style.display = "block";
+    modal.style.display = "flex";
 }
 
 

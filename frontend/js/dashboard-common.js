@@ -6,34 +6,56 @@ document.addEventListener('DOMContentLoaded', function() {
     const contentSections = document.querySelectorAll('.content-section');
     const pageTitle = document.getElementById('page-title');
     
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get section ID from data attribute
-            const sectionId = this.dataset.section;
-            
-            // Update active nav item
-            navItems.forEach(nav => nav.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Show corresponding section
-            contentSections.forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-                
-                // Update page title
-                const navText = this.textContent.trim();
+    // Global helper: switch to a section by its ID
+    window.navigateToSection = function(sectionId) {
+        const targetSection = document.getElementById(sectionId);
+        if (!targetSection) return;
+
+        contentSections.forEach(section => section.classList.remove('active'));
+        targetSection.classList.add('active');
+
+        // Sync active nav item
+        navItems.forEach(nav => {
+            nav.classList.remove('active');
+            if (nav.dataset.section === sectionId) {
+                nav.classList.add('active');
                 if (pageTitle) {
-                    pageTitle.textContent = navText.split('\n')[0];
+                    pageTitle.textContent = nav.textContent.trim().split('\n')[0].trim();
                 }
             }
         });
+
+        // Scroll to top of main content
+        const main = document.querySelector('.main-content');
+        if (main) main.scrollTop = 0;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.navigateToSection(this.dataset.section);
+        });
     });
+
+    // Handle all hash links ("View All", "View All Banks", etc.)
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a[href^="#"]');
+        if (!link) return;
+        const hash = link.getAttribute('href').slice(1); // strip "#"
+        if (document.getElementById(hash)) {
+            e.preventDefault();
+            window.navigateToSection(hash);
+        }
+    });
+
+    // Navigate to section from page load hash (e.g. URL has #blood-banks)
+    if (window.location.hash) {
+        const hash = window.location.hash.slice(1);
+        if (document.getElementById(hash)) {
+            window.navigateToSection(hash);
+        }
+    }
     
     // Mobile menu toggle
     const menuToggle = document.querySelector('.menu-toggle');

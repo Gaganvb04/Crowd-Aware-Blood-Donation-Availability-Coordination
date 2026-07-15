@@ -73,7 +73,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="donor-blood-group">Blood Group *</label>
-                                <select id="donor-blood-group" name="blood_group" required>
+                                <select id="donor-blood-group" name="blood_group" onchange="toggleCustomBloodGroup(this,'donor-custom-blood-group')" required>
                                     <option value="">Select Blood Group</option>
                                     <option value="A+">A+</option>
                                     <option value="A-">A-</option>
@@ -83,7 +83,9 @@
                                     <option value="AB-">AB-</option>
                                     <option value="O+">O+</option>
                                     <option value="O-">O-</option>
+                                    <option value="other">Other (specify)</option>
                                 </select>
+                                <input type="text" id="donor-custom-blood-group" name="custom_blood_group" placeholder="Type your blood group e.g. Bombay O" style="display:none; margin-top:8px;" maxlength="10">
                             </div>
                         </div>
                     </div>
@@ -121,6 +123,19 @@
                             <input type="number" id="donor-weight" name="weight" min="45" required>
                         </div>
                         <div class="form-group">
+                            <label>Have you donated blood before? *</label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="donated_before" value="yes" onchange="toggleLastDonation(this)">
+                                    Yes
+                                </label>
+                                <label>
+                                    <input type="radio" name="donated_before" value="no" onchange="toggleLastDonation(this)" checked>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="last-donation-group" style="display:none;">
                             <label for="donor-last-donation">Last Donation Date</label>
                             <input type="date" id="donor-last-donation" name="last_donation_date">
                         </div>
@@ -156,7 +171,12 @@
                                     <input type="checkbox" name="medical_conditions" value="none">
                                     None
                                 </label>
+                                <label>
+                                    <input type="checkbox" name="medical_conditions" value="other" id="medical-other-check" onchange="toggleMedicalOther(this)">
+                                    Other
+                                </label>
                             </div>
+                            <input type="text" id="medical-other-input" name="medical_conditions_other" placeholder="Please describe your condition..." style="display:none; margin-top:10px;" maxlength="200">
                         </div>
                     </div>
 
@@ -396,13 +416,43 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 BloodConnect. All rights reserved.</p>
-        </div>
-    </footer>
 
+
+    <script>
+        function toggleCustomBloodGroup(selectEl, inputId) {
+            const customInput = document.getElementById(inputId);
+            if (selectEl.value === 'other') {
+                customInput.style.display = 'block';
+                customInput.required = true;
+                customInput.focus();
+            } else {
+                customInput.style.display = 'none';
+                customInput.required = false;
+                customInput.value = '';
+            }
+        }
+
+        function toggleLastDonation(radio) {
+            const group = document.getElementById('last-donation-group');
+            if (radio.value === 'yes') {
+                group.style.display = 'block';
+            } else {
+                group.style.display = 'none';
+                document.getElementById('donor-last-donation').value = '';
+            }
+        }
+
+        function toggleMedicalOther(checkbox) {
+            const input = document.getElementById('medical-other-input');
+            if (checkbox.checked) {
+                input.style.display = 'block';
+                input.focus();
+            } else {
+                input.style.display = 'none';
+                input.value = '';
+            }
+        }
+    </script>
     <script src="js/registration.js"></script>
 </body>
 </html>

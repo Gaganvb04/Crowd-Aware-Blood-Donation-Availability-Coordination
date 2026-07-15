@@ -93,32 +93,32 @@
                         <div class="stat-icon">🩸</div>
                         <div class="stat-details">
                             <h3>Total Blood Units</h3>
-                            <p class="stat-number">1,247</p>
-                            <span class="stat-change positive">↑ 12% from last month</span>
+                            <p class="stat-number">0</p>
+                            <span class="stat-change" id="bank-total-units-change">0% from last month</span>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">💉</div>
                         <div class="stat-details">
                             <h3>Today's Collections</h3>
-                            <p class="stat-number">34</p>
-                            <span class="stat-change">Target: 50 units</span>
+                            <p class="stat-number">0</p>
+                            <span class="stat-change" id="bank-collections-change">Target: 0 units</span>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">🏥</div>
                         <div class="stat-details">
                             <h3>Pending Requests</h3>
-                            <p class="stat-number">5</p>
-                            <span class="stat-change urgent">2 urgent</span>
+                            <p class="stat-number">0</p>
+                            <span class="stat-change" id="bank-pending-requests-change">0 urgent</span>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">⚠️</div>
                         <div class="stat-details">
                             <h3>Expiring Soon</h3>
-                            <p class="stat-number">28</p>
-                            <span class="stat-change">Within 7 days</span>
+                            <p class="stat-number">0</p>
+                            <span class="stat-change" id="bank-expiring-change">Within 7 days</span>
                         </div>
                     </div>
                 </div>
@@ -321,46 +321,8 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>BB-2026-0001</td>
-                                    <td><span class="blood-type">O+</span></td>
-                                    <td>450 ml</td>
-                                    <td>Feb 01, 2026</td>
-                                    <td>Apr 01, 2026</td>
-                                    <td><span class="status-badge available">Available</span></td>
-                                    <td><button class="btn-link">View QR</button></td>
-                                    <td>
-                                        <button class="btn-icon" title="Edit">✏️</button>
-                                        <button class="btn-icon" title="Reserve">📌</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>BB-2026-0002</td>
-                                    <td><span class="blood-type">A-</span></td>
-                                    <td>450 ml</td>
-                                    <td>Jan 28, 2026</td>
-                                    <td>Feb 10, 2026</td>
-                                    <td><span class="status-badge expiring">Expiring Soon</span></td>
-                                    <td><button class="btn-link">View QR</button></td>
-                                    <td>
-                                        <button class="btn-icon" title="Edit">✏️</button>
-                                        <button class="btn-icon" title="Reserve">📌</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>BB-2026-0003</td>
-                                    <td><span class="blood-type">B+</span></td>
-                                    <td>450 ml</td>
-                                    <td>Feb 03, 2026</td>
-                                    <td>Apr 03, 2026</td>
-                                    <td><span class="status-badge reserved">Reserved</span></td>
-                                    <td><button class="btn-link">View QR</button></td>
-                                    <td>
-                                        <button class="btn-icon" title="Edit">✏️</button>
-                                        <button class="btn-icon" title="Unreserve">❌</button>
-                                    </td>
-                                </tr>
+                            <tbody id="inventoryTableBody">
+                                <!-- Live inventory data will be loaded here -->
                             </tbody>
                         </table>
                     </div>
@@ -378,46 +340,8 @@
                     <!-- Active Camps -->
                     <div class="camps-section">
                         <h3>Active Camps</h3>
-                        <div class="camps-grid">
-                            <div class="camp-management-card">
-                                <div class="camp-card-header">
-                                    <h4>City Hospital Blood Donation Camp</h4>
-                                    <span class="camp-badge active">Active</span>
-                                </div>
-                                <div class="camp-card-body">
-                                    <p><strong>Date:</strong> February 15, 2026</p>
-                                    <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
-                                    <p><strong>Location:</strong> City Hospital, Main Road</p>
-                                    <p><strong>Total Slots:</strong> 50</p>
-                                    <p><strong>Booked:</strong> 5 | <strong>Available:</strong> 45</p>
-                                    <p><strong>Collections:</strong> 0 units</p>
-                                </div>
-                                <div class="camp-card-footer">
-                                    <button class="btn-secondary btn-sm">Manage Slots</button>
-                                    <button class="btn-secondary btn-sm">Edit Camp</button>
-                                    <button class="btn-danger btn-sm">Cancel Camp</button>
-                                </div>
-                            </div>
-
-                            <div class="camp-management-card">
-                                <div class="camp-card-header">
-                                    <h4>Community Blood Drive</h4>
-                                    <span class="camp-badge active">Active</span>
-                                </div>
-                                <div class="camp-card-body">
-                                    <p><strong>Date:</strong> February 20, 2026</p>
-                                    <p><strong>Time:</strong> 10:00 AM - 4:00 PM</p>
-                                    <p><strong>Location:</strong> Community Center</p>
-                                    <p><strong>Total Slots:</strong> 40</p>
-                                    <p><strong>Booked:</strong> 10 | <strong>Available:</strong> 30</p>
-                                    <p><strong>Collections:</strong> 0 units</p>
-                                </div>
-                                <div class="camp-card-footer">
-                                    <button class="btn-secondary btn-sm">Manage Slots</button>
-                                    <button class="btn-secondary btn-sm">Edit Camp</button>
-                                    <button class="btn-danger btn-sm">Cancel Camp</button>
-                                </div>
-                            </div>
+                        <div class="camps-grid" id="manageCampsList">
+                            <!-- Live camps data will be loaded here -->
                         </div>
                     </div>
 
@@ -487,64 +411,8 @@
                     </div>
 
                     <div class="tab-content active" id="pending">
-                        <div class="requests-list">
-                            <div class="request-card emergency">
-                                <div class="request-header">
-                                    <div>
-                                        <h4>City Hospital</h4>
-                                        <span class="request-id">REQ-2026-001</span>
-                                    </div>
-                                    <span class="priority-badge emergency">Emergency</span>
-                                </div>
-                                <div class="request-body">
-                                    <div class="request-details">
-                                        <p><strong>Blood Type:</strong> O-</p>
-                                        <p><strong>Units Required:</strong> 4</p>
-                                        <p><strong>Purpose:</strong> Emergency Surgery</p>
-                                        <p><strong>Patient ID:</strong> PT-12345</p>
-                                        <p><strong>Requested:</strong> 30 minutes ago</p>
-                                        <p><strong>Required By:</strong> Immediately</p>
-                                    </div>
-                                    <div class="stock-check">
-                                        <p><strong>Available Stock:</strong> <span class="stock-low">5 units</span></p>
-                                        <p class="warning">⚠️ Limited stock available</p>
-                                    </div>
-                                </div>
-                                <div class="request-actions">
-                                    <button class="btn-primary">Approve Request</button>
-                                    <button class="btn-secondary">Contact Hospital</button>
-                                    <button class="btn-secondary">Find from Network</button>
-                                    <button class="btn-danger">Reject</button>
-                                </div>
-                            </div>
-
-                            <div class="request-card high">
-                                <div class="request-header">
-                                    <div>
-                                        <h4>District Hospital</h4>
-                                        <span class="request-id">REQ-2026-002</span>
-                                    </div>
-                                    <span class="priority-badge high">High Priority</span>
-                                </div>
-                                <div class="request-body">
-                                    <div class="request-details">
-                                        <p><strong>Blood Type:</strong> A+</p>
-                                        <p><strong>Units Required:</strong> 2</p>
-                                        <p><strong>Purpose:</strong> Scheduled Surgery</p>
-                                        <p><strong>Patient ID:</strong> PT-67890</p>
-                                        <p><strong>Requested:</strong> 2 hours ago</p>
-                                        <p><strong>Required By:</strong> Feb 10, 2026</p>
-                                    </div>
-                                    <div class="stock-check">
-                                        <p><strong>Available Stock:</strong> <span class="stock-good">245 units</span></p>
-                                    </div>
-                                </div>
-                                <div class="request-actions">
-                                    <button class="btn-primary">Approve Request</button>
-                                    <button class="btn-secondary">Contact Hospital</button>
-                                    <button class="btn-danger">Reject</button>
-                                </div>
-                            </div>
+                        <div class="requests-list" id="bankRequestsContainer">
+                            <!-- Live requests will be loaded here -->
                         </div>
                     </div>
                 </div>
@@ -574,16 +442,8 @@
                                     <th>Certificate</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Feb 05, 2026</td>
-                                    <td>John Doe</td>
-                                    <td>O+</td>
-                                    <td>450 ml</td>
-                                    <td>BB-2026-0125</td>
-                                    <td>Walk-in</td>
-                                    <td><button class="btn-link">Generate</button></td>
-                                </tr>
+                            <tbody id="recentDonationsBody">
+                                <!-- Live donations data will be loaded here -->
                             </tbody>
                         </table>
                     </div>
@@ -596,28 +456,8 @@
                     <h2>Blood Bank Network</h2>
                     <p class="subtitle">Connect with other blood banks for emergency stock sharing</p>
                     
-                    <div class="network-grid">
-                        <div class="network-card connected">
-                            <div class="network-header">
-                                <h4>District Blood Bank</h4>
-                                <span class="connection-badge">Connected</span>
-                            </div>
-                            <div class="network-body">
-                                <p><strong>Location:</strong> Coimbatore</p>
-                                <p><strong>Distance:</strong> 45 km</p>
-                                <p><strong>Contact:</strong> +91 98765-43210</p>
-                                <div class="stock-summary">
-                                    <span>O+: 150</span>
-                                    <span>O-: 25</span>
-                                    <span>A+: 120</span>
-                                    <span>B+: 95</span>
-                                </div>
-                            </div>
-                            <div class="network-actions">
-                                <button class="btn-secondary btn-sm">Request Blood</button>
-                                <button class="btn-secondary btn-sm">View Full Stock</button>
-                            </div>
-                        </div>
+                    <div class="network-grid" id="networkGrid">
+                        <!-- Live network data will be loaded here -->
                     </div>
                 </div>
             </section>
@@ -647,25 +487,8 @@
             <section id="alerts" class="content-section">
                 <div class="alerts-container">
                     <h2>Alerts & Notifications</h2>
-                    <div class="alerts-list">
-                        <div class="alert-card critical">
-                            <span class="alert-icon">🚨</span>
-                            <div class="alert-content">
-                                <h4>Critical Stock Level - O-</h4>
-                                <p>O- blood stock has fallen to 5 units (minimum threshold: 20 units)</p>
-                                <span class="alert-time">5 minutes ago</span>
-                                <button class="btn-primary btn-sm">Alert Donors</button>
-                            </div>
-                        </div>
-                        <div class="alert-card warning">
-                            <span class="alert-icon">⚠️</span>
-                            <div class="alert-content">
-                                <h4>Units Expiring Soon</h4>
-                                <p>28 units are expiring within the next 7 days</p>
-                                <span class="alert-time">1 hour ago</span>
-                                <button class="btn-secondary btn-sm">View List</button>
-                            </div>
-                        </div>
+                    <div class="alerts-list" id="alertsContainer">
+                        <!-- Live alerts data will be loaded here -->
                     </div>
                 </div>
             </section>

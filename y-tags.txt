@@ -1,0 +1,35 @@
+>
+                    My Requests
+                <
+>
+                    Stock Availability
+                <
+>
+                    Request History
+                <
+>🚨 Emergency Request<
+>City Hospital<
+>Check Availability<
+>City Blood Bank<
+>2.5 km away<
+>15 km away<
+>Nearby Blood Banks<
+>Component Type *<
+>Cryoprecipitate<
+>Priority Level *<
+>Emergency (Immediate)<
+>Required By *<
+>Surgery<
+>Pregnancy Complications<
+>My Blood Requests<
+>No completed requests to display<
+>Blood Stock Availability<
+>City Blood Bank<
+>Community Blood Center<
+>City Blood Bank<
+>2.5 km away<
+>Request History<
+>🚨 Emergency Blood Request<
+>Emergency Notes<
+>Submit Emergency Request<
+>Blood Stock Availability<

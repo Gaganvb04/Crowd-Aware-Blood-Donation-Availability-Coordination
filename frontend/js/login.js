@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         localStorage.setItem('username', result.username);
                         localStorage.setItem('role', result.role);
 
-                        alert('Login successful! Redirecting to dashboard...');
+                        // Redirect immediately — no alert needed
                         window.location.href = result.redirect_url;
                     } else if (result.message === "Account pending approval") {
                         alert('Your account is pending verification. Please wait for the admin to approve your uploaded report.');

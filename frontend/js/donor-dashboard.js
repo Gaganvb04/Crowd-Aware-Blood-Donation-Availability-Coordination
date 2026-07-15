@@ -132,12 +132,38 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="eligibility-card ${isEligible ? 'eligible' : 'ineligible'}">
                             <div class="status-icon">${isEligible ? '✓' : '⏳'}</div>
                             <div class="status-details">
-                                <h4>${isEligible ? 'Currently Eligible' : 'Wait Period'}</h4>
-                                <p>${isEligible ? 'You can donate blood now' : `You can donate in ${stats.days_remaining} days`}</p>
+                                <h4>${isEligible ? 'Eligible to Donate' : 'Not Eligible Yet'}</h4>
+                                <p>${isEligible ? 'You can donate blood today.' : `You can donate again in ${stats.days_remaining} days.`}</p>
                                 ${isEligible ? '<a href="#book-slot" class="btn-primary" onclick="document.querySelector(\'[data-section=book-slot]\').click()">Book Donation Slot</a>' : ''}
                             </div>
                         </div>
                     `;
+                }
+                
+                // Update Impact Visualization
+                const impactContainer = document.getElementById('donor-impact-visualization');
+                if (impactContainer && stats.impact_breakdown) {
+                    const { emergency_cases, surgeries, cancer_patients } = stats.impact_breakdown;
+                    const total = emergency_cases + surgeries + cancer_patients;
+                    
+                    if (total === 0) {
+                        impactContainer.innerHTML = '<p class="no-data">Make a donation to see your impact!</p>';
+                    } else {
+                        impactContainer.innerHTML = `
+                            <div class="impact-item">
+                                <div class="impact-bar" style="--percentage: ${Math.max(10, (emergency_cases/total)*100)}%"></div>
+                                <span>Emergency Cases: ${emergency_cases}</span>
+                            </div>
+                            <div class="impact-item">
+                                <div class="impact-bar" style="--percentage: ${Math.max(10, (surgeries/total)*100)}%"></div>
+                                <span>Surgeries: ${surgeries}</span>
+                            </div>
+                            <div class="impact-item">
+                                <div class="impact-bar" style="--percentage: ${Math.max(10, (cancer_patients/total)*100)}%"></div>
+                                <span>Cancer Patients: ${cancer_patients}</span>
+                            </div>
+                        `;
+                    }
                 }
             })
             .catch(err => console.error('Error loading stats:', err));

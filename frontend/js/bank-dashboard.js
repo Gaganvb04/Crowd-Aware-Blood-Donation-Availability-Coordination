@@ -439,9 +439,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (statCards[3]) statCards[3].textContent = stats.expiring_soon;
 
                 // Update urgent label
-                const urgentLabel = document.querySelector('.stat-change.urgent');
-                if (urgentLabel && stats.pending_requests > 0) {
-                    urgentLabel.textContent = `${stats.pending_requests} urgent`;
+                const urgentLabel = document.getElementById('bank-pending-requests-change');
+                if (urgentLabel && stats.urgent_requests !== undefined) {
+                    urgentLabel.textContent = `${stats.urgent_requests} urgent`;
+                    urgentLabel.className = stats.urgent_requests > 0 ? 'stat-change urgent' : 'stat-change';
+                }
+                
+                const totalUnitsChange = document.getElementById('bank-total-units-change');
+                if (totalUnitsChange && stats.total_units_change_percent !== undefined) {
+                    if (stats.total_units_change_percent === 0) {
+                        totalUnitsChange.textContent = 'Consistent with last month';
+                        totalUnitsChange.className = 'stat-change';
+                    } else {
+                        const icon = stats.total_units_change_percent > 0 ? '↑' : '↓';
+                        const sign = stats.total_units_change_percent > 0 ? 'positive' : 'negative';
+                        totalUnitsChange.textContent = `${icon} ${Math.abs(stats.total_units_change_percent)}% from last month`;
+                        totalUnitsChange.className = `stat-change ${sign}`;
+                    }
+                }
+                
+                const collectionsChange = document.getElementById('bank-collections-change');
+                if (collectionsChange && stats.collections_target !== undefined) {
+                    collectionsChange.textContent = `Target: ${stats.collections_target} units`;
+                }
+                
+                const expiringChange = document.getElementById('bank-expiring-change');
+                if (expiringChange) {
+                    expiringChange.textContent = 'Within 7 days';
                 }
             })
             .catch(err => console.error('Error loading stats:', err));

@@ -75,35 +75,8 @@
 
             <!-- Overview Section -->
             <section id="overview" class="content-section active">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">💉</div>
-                        <div class="stat-details">
-                            <h3>Total Donations</h3>
-                            <p class="stat-number">12</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">❤️</div>
-                        <div class="stat-details">
-                            <h3>Lives Saved</h3>
-                            <p class="stat-number">36</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📅</div>
-                        <div class="stat-details">
-                            <h3>Next Eligible</h3>
-                            <p class="stat-number">45 days</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🏆</div>
-                        <div class="stat-details">
-                            <h3>Achievement Level</h3>
-                            <p class="stat-number">Gold</p>
-                        </div>
-                    </div>
+                <div class="stats-grid" id="statsGrid">
+                    <p class="no-data">Loading stats...</p>
                 </div>
 
                 <div class="dashboard-widgets">
@@ -111,21 +84,8 @@
                         <div class="widget-header">
                             <h3>Eligibility Status</h3>
                         </div>
-                        <div class="widget-content">
-                            <div class="eligibility-card eligible">
-                                <div class="status-icon">✓</div>
-                                <div class="status-details">
-                                    <h4>Currently Eligible</h4>
-                                    <p>You can donate blood now</p>
-                                    <ul class="criteria-list">
-                                        <li>✓ Age: 28 years (18-65)</li>
-                                        <li>✓ Weight: 65 kg (50+ kg)</li>
-                                        <li>✓ Last Donation: 4 months ago</li>
-                                        <li>✓ Health Status: Good</li>
-                                    </ul>
-                                    <a href="#book-slot" class="btn-primary">Book Donation Slot</a>
-                                </div>
-                            </div>
+                        <div class="widget-content" id="eligibilityWidget">
+                            <p class="no-data">Loading eligibility...</p>
                         </div>
                     </div>
 
@@ -135,33 +95,8 @@
                             <a href="#camps" class="view-all">View All</a>
                         </div>
                         <div class="widget-content">
-                            <div class="camp-list">
-                                <div class="camp-item">
-                                    <div class="camp-date">
-                                        <span class="day">15</span>
-                                        <span class="month">Feb</span>
-                                    </div>
-                                    <div class="camp-details">
-                                        <h4>City Hospital Blood Donation Camp</h4>
-                                        <p>📍 City Hospital, Main Road, Pollachi</p>
-                                        <p>⏰ 9:00 AM - 5:00 PM</p>
-                                        <span class="distance">2.5 km away</span>
-                                    </div>
-                                    <button class="btn-secondary btn-sm">Book Slot</button>
-                                </div>
-                                <div class="camp-item">
-                                    <div class="camp-date">
-                                        <span class="day">20</span>
-                                        <span class="month">Feb</span>
-                                    </div>
-                                    <div class="camp-details">
-                                        <h4>Community Blood Drive</h4>
-                                        <p>📍 Community Center, Pollachi</p>
-                                        <p>⏰ 10:00 AM - 4:00 PM</p>
-                                        <span class="distance">3.8 km away</span>
-                                    </div>
-                                    <button class="btn-secondary btn-sm">Book Slot</button>
-                                </div>
+                            <div class="camp-list" id="dashboardCampList">
+                                <p class="no-data">Loading camps...</p>
                             </div>
                         </div>
                     </div>
@@ -173,19 +108,8 @@
                             <h3>Donation Impact</h3>
                         </div>
                         <div class="widget-content">
-                            <div class="impact-visualization">
-                                <div class="impact-item">
-                                    <div class="impact-bar" style="--percentage: 75%"></div>
-                                    <span>Emergency Cases: 9</span>
-                                </div>
-                                <div class="impact-item">
-                                    <div class="impact-bar" style="--percentage: 50%"></div>
-                                    <span>Surgeries: 6</span>
-                                </div>
-                                <div class="impact-item">
-                                    <div class="impact-bar" style="--percentage: 90%"></div>
-                                    <span>Cancer Patients: 11</span>
-                                </div>
+                            <div class="impact-visualization" id="donor-impact-visualization">
+                                <p class="no-data">Loading impact data...</p>
                             </div>
                         </div>
                     </div>
@@ -196,31 +120,8 @@
                             <a href="#notifications" class="view-all">View All</a>
                         </div>
                         <div class="widget-content">
-                            <div class="notification-list">
-                                <div class="notification-item unread">
-                                    <span class="notification-icon">🔔</span>
-                                    <div class="notification-content">
-                                        <p><strong>Urgent: O+ Blood Needed</strong></p>
-                                        <p>City Hospital needs O+ blood urgently for emergency surgery</p>
-                                        <span class="notification-time">2 hours ago</span>
-                                    </div>
-                                </div>
-                                <div class="notification-item">
-                                    <span class="notification-icon">📅</span>
-                                    <div class="notification-content">
-                                        <p><strong>Donation Slot Confirmed</strong></p>
-                                        <p>Your slot at City Hospital on Feb 15 at 10:00 AM is confirmed</p>
-                                        <span class="notification-time">1 day ago</span>
-                                    </div>
-                                </div>
-                                <div class="notification-item">
-                                    <span class="notification-icon">🏕️</span>
-                                    <div class="notification-content">
-                                        <p><strong>New Camp Near You</strong></p>
-                                        <p>Blood donation camp scheduled at Community Center on Feb 20</p>
-                                        <span class="notification-time">2 days ago</span>
-                                    </div>
-                                </div>
+                            <div class="notification-list" id="dashboardNotificationsList">
+                                <p class="no-data">Loading notifications...</p>
                             </div>
                         </div>
                     </div>
@@ -399,57 +300,8 @@
                     </div>
 
                     <!-- Camps List -->
-                    <div class="camps-grid">
-                        <div class="camp-card">
-                            <div class="camp-card-header">
-                                <h3>City Hospital Blood Donation Camp</h3>
-                                <span class="camp-status available">Available</span>
-                            </div>
-                            <div class="camp-card-body">
-                                <p><strong>📍 Location:</strong> City Hospital, Main Road, Pollachi</p>
-                                <p><strong>📅 Date:</strong> February 15, 2026</p>
-                                <p><strong>⏰ Time:</strong> 9:00 AM - 5:00 PM</p>
-                                <p><strong>📏 Distance:</strong> 2.5 km away</p>
-                                <p><strong>👥 Slots:</strong> 45 available</p>
-                            </div>
-                            <div class="camp-card-footer">
-                                <button class="btn-primary btn-block">Book Slot</button>
-                            </div>
-                        </div>
-
-                        <div class="camp-card">
-                            <div class="camp-card-header">
-                                <h3>Community Blood Drive</h3>
-                                <span class="camp-status available">Available</span>
-                            </div>
-                            <div class="camp-card-body">
-                                <p><strong>📍 Location:</strong> Community Center, Pollachi</p>
-                                <p><strong>📅 Date:</strong> February 20, 2026</p>
-                                <p><strong>⏰ Time:</strong> 10:00 AM - 4:00 PM</p>
-                                <p><strong>📏 Distance:</strong> 3.8 km away</p>
-                                <p><strong>👥 Slots:</strong> 30 available</p>
-                            </div>
-                            <div class="camp-card-footer">
-                                <button class="btn-primary btn-block">Book Slot</button>
-                            </div>
-                        </div>
-
-                        <div class="camp-card">
-                            <div class="camp-card-header">
-                                <h3>District Blood Bank Camp</h3>
-                                <span class="camp-status filling-fast">Filling Fast</span>
-                            </div>
-                            <div class="camp-card-body">
-                                <p><strong>📍 Location:</strong> District Hospital, Pollachi</p>
-                                <p><strong>📅 Date:</strong> February 22, 2026</p>
-                                <p><strong>⏰ Time:</strong> 8:00 AM - 6:00 PM</p>
-                                <p><strong>📏 Distance:</strong> 4.2 km away</p>
-                                <p><strong>👥 Slots:</strong> 8 available</p>
-                            </div>
-                            <div class="camp-card-footer">
-                                <button class="btn-primary btn-block">Book Slot</button>
-                            </div>
-                        </div>
+                    <div class="camps-grid" id="allCampsGrid">
+                        <p class="no-data">Loading camps...</p>
                     </div>
                 </div>
             </section>
@@ -461,31 +313,8 @@
                     <form id="bookingForm" class="booking-form">
                         <div class="form-step active" data-step="1">
                             <h3>Select Camp</h3>
-                            <div class="camp-selection">
-                                <label class="camp-option">
-                                    <input type="radio" name="camp" value="camp1" required>
-                                    <div class="camp-option-content">
-                                        <h4>City Hospital Blood Donation Camp</h4>
-                                        <p>City Hospital, Main Road, Pollachi</p>
-                                        <p>February 15, 2026 | 9:00 AM - 5:00 PM</p>
-                                    </div>
-                                </label>
-                                <label class="camp-option">
-                                    <input type="radio" name="camp" value="camp2">
-                                    <div class="camp-option-content">
-                                        <h4>Community Blood Drive</h4>
-                                        <p>Community Center, Pollachi</p>
-                                        <p>February 20, 2026 | 10:00 AM - 4:00 PM</p>
-                                    </div>
-                                </label>
-                                <label class="camp-option">
-                                    <input type="radio" name="camp" value="camp3">
-                                    <div class="camp-option-content">
-                                        <h4>District Blood Bank Camp</h4>
-                                        <p>District Hospital, Pollachi</p>
-                                        <p>February 22, 2026 | 8:00 AM - 6:00 PM</p>
-                                    </div>
-                                </label>
+                            <div class="camp-selection" id="bookingCampList">
+                                <p class="no-data">Loading camps...</p>
                             </div>
                             <button type="button" class="btn-primary" onclick="nextStep(2)">Next</button>
                         </div>
@@ -578,43 +407,14 @@
                     </div>
 
                     <div class="tab-content active" id="upcoming">
-                        <div class="appointments-list">
-                            <div class="appointment-card">
-                                <div class="appointment-header">
-                                    <h3>City Hospital Blood Donation Camp</h3>
-                                    <span class="appointment-status confirmed">Confirmed</span>
-                                </div>
-                                <div class="appointment-body">
-                                    <p><strong>📅 Date:</strong> February 15, 2026</p>
-                                    <p><strong>⏰ Time:</strong> 10:00 AM</p>
-                                    <p><strong>📍 Location:</strong> City Hospital, Main Road, Pollachi</p>
-                                    <p><strong>🆔 Booking ID:</strong> BD-2026-001234</p>
-                                </div>
-                                <div class="appointment-footer">
-                                    <button class="btn-secondary btn-sm">View Details</button>
-                                    <button class="btn-danger btn-sm">Cancel</button>
-                                </div>
-                            </div>
+                        <div class="appointments-list" id="upcomingAppointmentsList">
+                            <p class="no-data">Loading appointments...</p>
                         </div>
                     </div>
 
                     <div class="tab-content" id="past">
-                        <div class="appointments-list">
-                            <div class="appointment-card">
-                                <div class="appointment-header">
-                                    <h3>Community Blood Drive</h3>
-                                    <span class="appointment-status completed">Completed</span>
-                                </div>
-                                <div class="appointment-body">
-                                    <p><strong>📅 Date:</strong> October 5, 2025</p>
-                                    <p><strong>⏰ Time:</strong> 11:00 AM</p>
-                                    <p><strong>📍 Location:</strong> Community Center, Pollachi</p>
-                                    <p><strong>💉 Donated:</strong> 450 ml</p>
-                                </div>
-                                <div class="appointment-footer">
-                                    <button class="btn-secondary btn-sm">Download Certificate</button>
-                                </div>
-                            </div>
+                        <div class="appointments-list" id="pastAppointmentsList">
+                            <p class="no-data">Loading appointments...</p>
                         </div>
                     </div>
 
@@ -633,46 +433,8 @@
                         <h2>Notifications</h2>
                         <button class="btn-secondary btn-sm">Mark All as Read</button>
                     </div>
-                    <div class="notifications-list">
-                        <div class="notification-card unread">
-                            <div class="notification-icon urgent">🚨</div>
-                            <div class="notification-content">
-                                <h4>Urgent: O+ Blood Needed</h4>
-                                <p>City Hospital needs O+ blood urgently for an emergency surgery. Your blood type matches. Can you donate?</p>
-                                <span class="notification-time">2 hours ago</span>
-                                <div class="notification-actions">
-                                    <button class="btn-primary btn-sm">I Can Donate</button>
-                                    <button class="btn-secondary btn-sm">Not Available</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="notification-card">
-                            <div class="notification-icon success">✓</div>
-                            <div class="notification-content">
-                                <h4>Donation Slot Confirmed</h4>
-                                <p>Your blood donation slot at City Hospital on February 15, 2026 at 10:00 AM has been confirmed.</p>
-                                <span class="notification-time">1 day ago</span>
-                            </div>
-                        </div>
-                        <div class="notification-card">
-                            <div class="notification-icon info">ℹ️</div>
-                            <div class="notification-content">
-                                <h4>New Camp Near You</h4>
-                                <p>A new blood donation camp has been scheduled at Community Center on February 20, 2026. Book your slot now!</p>
-                                <span class="notification-time">2 days ago</span>
-                                <div class="notification-actions">
-                                    <button class="btn-secondary btn-sm">View Camp</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="notification-card">
-                            <div class="notification-icon reminder">📅</div>
-                            <div class="notification-content">
-                                <h4>Reminder: You're Eligible to Donate</h4>
-                                <p>It's been 6 months since your last donation. You're now eligible to donate again. Book a slot today!</p>
-                                <span class="notification-time">3 days ago</span>
-                            </div>
-                        </div>
+                    <div class="notifications-list" id="notificationsList">
+                        <p class="no-data">Loading notifications...</p>
                     </div>
                 </div>
             </section>

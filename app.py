@@ -336,9 +336,7 @@ def get_appointments(user_id):
 def serve_index():
     return send_from_directory(app.static_folder, 'index.html')
 
-@app.route('/<path:path>')
-def serve_static(path):
-    return send_from_directory(app.static_folder, path)
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -1529,8 +1527,7 @@ def get_ai_stats():
         return jsonify(stats), 200
     except Exception as e:
         return jsonify({"message": str(e)}), 400
-if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+
 
 # ==========================================
 # BANK DASHBOARD API ENDPOINTS
@@ -1981,4 +1978,13 @@ def ml_retrain():
                         "retrained_at": datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory(app.static_folder, path)
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5001)
 

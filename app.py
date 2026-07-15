@@ -91,12 +91,19 @@ class BloodRequest(db.Model):
     hospital = db.relationship('User', backref=db.backref('requests', lazy=True))
 
 class BloodInventory(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = 'blood_inventory'
+    
+    id = db.Column(db.Integer, name='inventory_id', primary_key=True)
     bank_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     blood_group = db.Column(db.String(5), nullable=False)
     units = db.Column(db.Integer, default=0)
     expiry_date = db.Column(db.DateTime, nullable=False)
-    added_date = db.Column(db.DateTime, default=datetime.utcnow)
+    added_date = db.Column(db.DateTime, name='collection_date', default=datetime.utcnow)
+    
+    # Additional helper mappings for database fields
+    bag_id = db.Column(db.String(50), default=lambda: f"BAG-{int(datetime.utcnow().timestamp())}")
+    volume = db.Column(db.Integer, default=450)
+    status = db.Column(db.String(20), default='available')
     
     bank = db.relationship('User', backref=db.backref('inventory', lazy=True))
 

@@ -477,5 +477,119 @@
 
     <script src="js/dashboard-common.js"></script>
     <script src="js/bank-dashboard.js"></script>
+
+    <!-- Edit Camp Modal -->
+    <div id="editCampModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Donation Camp</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('editCampModal').style.display='none'">&times;</button>
+            </div>
+            <form id="editCampForm">
+                <input type="hidden" id="editCampId">
+                <div class="form-group">
+                    <label>Camp Name *</label>
+                    <input type="text" id="editCampName" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date *</label>
+                        <input type="date" id="editCampDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Time *</label>
+                        <input type="time" id="editCampStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Time *</label>
+                        <input type="time" id="editCampEnd" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Location *</label>
+                    <input type="text" id="editCampLocation" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" class="btn-secondary"
+                        onclick="document.getElementById('editCampModal').style.display='none'">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Manage Slots Modal -->
+    <div id="manageSlotsModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Manage Slots & Bookings</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('manageSlotsModal').style.display='none'">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4>Current Appointments</h4>
+                <div class="table-container">
+                    <table class="data-table" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Donor</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="slotsTableBody">
+                            <!-- Dynamic Slots -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 15px; text-align: right; border-top: 1px solid rgba(255,255,255,0.08);">
+                <button class="btn-secondary"
+                    onclick="document.getElementById('manageSlotsModal').style.display='none'">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Stock Modal -->
+    <div id="addStockModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Blood Stock</h3>
+                <button class="modal-close"
+                    onclick="document.getElementById('addStockModal').style.display='none'">&times;</button>
+            </div>
+            <form id="addStockForm">
+                <div class="form-group">
+                    <label>Blood Group</label>
+                    <select id="stockGroup" required onchange="toggleCustomBloodGroup(this,'stockGroupManual')">
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Other">Other (specify)</option>
+                    </select>
+                    <input type="text" id="stockGroupManual" class="form-control" style="display: none; margin-top: 8px;" placeholder="Type blood group manually" maxlength="15">
+                </div>
+                <div class="form-group">
+                    <label>Quantity (Number of Bags)</label>
+                    <input type="number" id="stockUnits" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Expiry Date (Required if adding)</label>
+                    <input type="date" id="stockExpiry">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Update Stock</button>
+                    <button type="button" class="btn-secondary"
+                        onclick="document.getElementById('addStockModal').style.display='none'">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

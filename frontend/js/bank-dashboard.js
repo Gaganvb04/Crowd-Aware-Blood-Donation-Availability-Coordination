@@ -30,7 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (addStockForm) {
         addStockForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            const group = document.getElementById('stockGroup').value;
+            let group = document.getElementById('stockGroup').value;
+            if (group === 'Other' && document.getElementById('stockGroupManual')) {
+                group = document.getElementById('stockGroupManual').value.trim();
+            }
             const units = document.getElementById('stockUnits').value;
             const expiry = document.getElementById('stockExpiry').value;
 
@@ -46,15 +49,24 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.message.includes('successfully')) {
+                    if (data.message && data.message.includes('successfully')) {
                         alert('Stock updated!');
                         addStockModal.style.display = 'none';
+                        // Reset form fields
+                        addStockForm.reset();
+                        const manualInput = document.getElementById('stockGroupManual');
+                        if (manualInput) manualInput.style.display = 'none';
+                        
                         loadBankStats(bankId);
                         loadBankInventory(bankId);
                         loadDetailedInventory(bankId);
                     } else {
-                        alert('Error: ' + data.message);
+                        alert('Error: ' + (data.message || 'Unknown error'));
                     }
+                })
+                .catch(err => {
+                    console.error('Error updating stock:', err);
+                    alert('Update failed: ' + err.message);
                 });
         });
     }
@@ -514,8 +526,24 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(data => {
                 grid.innerHTML = '';
-                const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+                const bloodGroups = Object.keys(data);
                 const criticalGroups = [];
+
+                // Dynamically update dropdown filters with any custom blood groups
+                const groupFilters = document.querySelectorAll('.filters-bar select.filter-select');
+                groupFilters.forEach(select => {
+                    if (select.options[0] && (select.options[0].text.includes('Blood Group') || select.options[0].text === 'All Blood Groups')) {
+                        const currentVal = select.value;
+                        select.innerHTML = '<option value="">All Blood Groups</option>';
+                        bloodGroups.forEach(bg => {
+                            const opt = document.createElement('option');
+                            opt.value = bg;
+                            opt.textContent = bg;
+                            select.appendChild(opt);
+                        });
+                        select.value = currentVal;
+                    }
+                });
 
                 bloodGroups.forEach(bg => {
                     const units = data[bg] || 0;

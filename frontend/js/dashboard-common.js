@@ -220,4 +220,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const date = new Date(`2000-01-01T${timeString}`);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     };
+
+    // Toggle manual input for custom blood groups
+    window.toggleCustomBloodGroup = function(selectEl, inputId) {
+        const manualInput = document.getElementById(inputId);
+        if (!manualInput) return;
+        if (selectEl.value === 'Other' || selectEl.value === 'other') {
+            manualInput.style.display = 'block';
+            manualInput.required = true;
+            manualInput.focus();
+        } else {
+            manualInput.style.display = 'none';
+            manualInput.required = false;
+        }
+    };
 });

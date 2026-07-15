@@ -37,7 +37,7 @@ class User(db.Model):
     role = db.Column(db.String(20), nullable=False)  # donor, bank, hospital, admin
     donation_type = db.Column(db.String(20), default='Free') # Free, Paid
     phone = db.Column(db.String(20))
-    blood_group = db.Column(db.String(5))
+    blood_group = db.Column(db.String(15))
     medical_conditions = db.Column(db.Text)
     account_status = db.Column(db.String(20), default='active') # active, pending, suspended
     
@@ -80,7 +80,7 @@ class BloodRequest(db.Model):
     hospital_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     patient_name = db.Column(db.String(100), nullable=False)
     patient_id = db.Column(db.String(50), nullable=False)
-    blood_group = db.Column(db.String(5), nullable=False)
+    blood_group = db.Column(db.String(15), nullable=False)
     units = db.Column(db.Integer, nullable=False)
     priority = db.Column(db.String(20), nullable=False) # emergency, urgent, routine
     reason = db.Column(db.String(255), nullable=False)
@@ -95,7 +95,7 @@ class BloodInventory(db.Model):
     
     id = db.Column(db.Integer, name='inventory_id', primary_key=True)
     bank_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    blood_group = db.Column(db.String(5), nullable=False)
+    blood_group = db.Column(db.String(15), nullable=False)
     units = db.Column(db.Integer, default=0)
     expiry_date = db.Column(db.DateTime, nullable=False)
     added_date = db.Column(db.DateTime, name='collection_date', default=datetime.utcnow)

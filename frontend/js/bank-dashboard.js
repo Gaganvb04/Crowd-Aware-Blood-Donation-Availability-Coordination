@@ -524,20 +524,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (banner && alertText) {
                     if (criticalGroups.length > 0) {
-                        // Find the one with lowest stock
-                        criticalGroups.sort((a, b) => a.units - b.units);
-                        const mostCritical = criticalGroups[0];
+                        if (criticalGroups.length > 1) {
+                            // Aggregate critical groups
+                            const groupList = criticalGroups.map(g => g.group).join(', ');
+                            alertText.innerHTML = `<strong>Critical Alert:</strong> Multiple blood groups (${groupList}) are below safety level (0-4 units remaining)`;
+                        } else {
+                            const mostCritical = criticalGroups[0];
+                            alertText.innerHTML = `<strong>Critical Alert:</strong> ${mostCritical.group} blood stock below safety level (${mostCritical.units} units remaining)`;
+                        }
                         
-                        alertText.innerHTML = `<strong>Critical Alert:</strong> ${mostCritical.group} blood stock below safety level (${mostCritical.units} units remaining)`;
                         banner.style.display = 'flex';
 
                         if (alertBtn) {
-                            alertBtn.onclick = function() {
+                            alertBtn.onclick = function(e) {
+                                e.preventDefault();
                                 alertBtn.disabled = true;
                                 alertBtn.textContent = 'Sending...';
                                 fetch('/api/analytics/run-prediction', {
                                     method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' }
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({})
                                 })
                                 .then(res => res.json())
                                 .then(resData => {
@@ -547,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 })
                                 .catch(err => {
                                     console.error('Error sending alerts:', err);
-                                    alert('Failed to send alerts.');
+                                    alert('Failed to send alerts: ' + err.message);
                                     alertBtn.disabled = false;
                                     alertBtn.textContent = 'Send Alert to Donors';
                                 });

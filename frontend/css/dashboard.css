@@ -876,3 +876,92 @@ body {
     display: block;
     text-align: center;
 }
+
+/* ==========================================================================
+   BLOOD GROUP INVENTORY GRID & CARDS
+   ========================================================================== */
+.blood-groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.blood-group-card {
+    text-align: center;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-sm, 8px);
+    border: 1px solid var(--border-glass, rgba(255, 255, 255, 0.08));
+    transition: transform 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.blood-group-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+}
+
+.blood-group-card h4 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text-primary, #fff);
+}
+
+.blood-group-card .units {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-secondary, #a0aec0);
+}
+
+.blood-group-card .stock-bar {
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.blood-group-card .stock-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* Status colors and borders */
+.blood-group-card.status-good {
+    border-color: rgba(74, 222, 128, 0.4);
+}
+.blood-group-card.status-good .stock-fill {
+    background-color: #4ade80;
+}
+.blood-group-card.status-good .status-label {
+    color: #4ade80;
+}
+
+.blood-group-card.status-low {
+    border-color: rgba(246, 224, 94, 0.4);
+}
+.blood-group-card.status-low .stock-fill {
+    background-color: #f6e05e;
+}
+.blood-group-card.status-low .status-label {
+    color: #f6e05e;
+}
+
+.blood-group-card.status-critical {
+    border-color: rgba(245, 101, 101, 0.4);
+}
+.blood-group-card.status-critical .stock-fill {
+    background-color: #f56565;
+}
+.blood-group-card.status-critical .status-label {
+    color: #f56565;
+}
+
+.blood-group-card .status-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

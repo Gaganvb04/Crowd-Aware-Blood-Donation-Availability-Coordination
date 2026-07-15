@@ -242,31 +242,11 @@
                     <div class="widget">
                         <div class="widget-header">
                             <h3>Today's Donation Schedule</h3>
-                            <a href="#donations" class="view-all">View All</a>
+                            <a href="#donations" class="view-all" onclick="navigateToSection('donations')">View All</a>
                         </div>
                         <div class="widget-content">
-                            <div class="schedule-list">
-                                <div class="schedule-item">
-                                    <span class="time">10:00 AM</span>
-                                    <div class="schedule-details">
-                                        <p><strong>John Doe</strong> - O+</p>
-                                        <span class="status confirmed">Confirmed</span>
-                                    </div>
-                                </div>
-                                <div class="schedule-item">
-                                    <span class="time">11:00 AM</span>
-                                    <div class="schedule-details">
-                                        <p><strong>Sarah Smith</strong> - A+</p>
-                                        <span class="status confirmed">Confirmed</span>
-                                    </div>
-                                </div>
-                                <div class="schedule-item">
-                                    <span class="time">2:00 PM</span>
-                                    <div class="schedule-details">
-                                        <p><strong>Mike Johnson</strong> - B+</p>
-                                        <span class="status pending">Pending</span>
-                                    </div>
-                                </div>
+                            <div class="schedule-list" id="todayScheduleWidget">
+                                <p class="loading-text" style="color:#aaa;text-align:center;padding:1rem;">Loading schedule...</p>
                             </div>
                         </div>
                     </div>

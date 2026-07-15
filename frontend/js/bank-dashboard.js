@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loadBankRequests(bankId);
         loadBankDonations(bankId);
         loadNetwork(bankId);
+        loadTodaySchedule(bankId);
     }
 
     // Wiring up Add Stock Button
@@ -517,6 +518,39 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(err => {
                 console.error('Error loading inventory:', err);
                 grid.innerHTML = '<p>Error loading inventory data.</p>';
+            });
+    }
+
+    function loadTodaySchedule(bankId) {
+        const widget = document.getElementById('todayScheduleWidget');
+        if (!widget) return;
+
+        fetch(`/api/donations/today?bank_id=${bankId}`)
+            .then(res => res.json())
+            .then(data => {
+                widget.innerHTML = '';
+                if (data.length === 0) {
+                    widget.innerHTML = '<p class="no-data" style="color:#aaa;text-align:center;padding:1rem;">No appointments or donations scheduled for today.</p>';
+                    return;
+                }
+
+                data.forEach(item => {
+                    const statusClass = item.status.toLowerCase() === 'confirmed' || item.status.toLowerCase() === 'walk-in' ? 'confirmed' : 'pending';
+                    const div = document.createElement('div');
+                    div.className = 'schedule-item';
+                    div.innerHTML = `
+                        <span class="time">${item.time}</span>
+                        <div class="schedule-details">
+                            <p><strong>${item.donor_name}</strong> - ${item.blood_group}</p>
+                            <span class="status ${statusClass}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
+                        </div>
+                    `;
+                    widget.appendChild(div);
+                });
+            })
+            .catch(err => {
+                console.error('Error loading today\'s schedule:', err);
+                widget.innerHTML = '<p class="error-text" style="color:#ff6b6b;text-align:center;padding:1rem;">Error loading schedule.</p>';
             });
     }
 });

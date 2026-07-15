@@ -1659,12 +1659,60 @@ def get_camps():
 
 @app.route('/api/donations/today', methods=['GET'])
 def get_todays_donations():
-    # Mock data
-    return jsonify([
-        {"name": "John Doe", "group": "O+"},
-        {"name": "Jane Smith", "group": "A-"},
-        {"name": "Mike Ross", "group": "B+"}
-    ])
+    bank_id = request.args.get('bank_id')
+    today   = datetime.utcnow().date()
+
+    results = []
+
+    if bank_id:
+        # Fetch today's appointments booked at this bank
+        appts = Appointment.query.filter(
+            Appointment.bank_id == int(bank_id),
+            db.func.date(Appointment.date) == today
+        ).order_by(Appointment.time_slot).all()
+
+        for apt in appts:
+            donor = User.query.get(apt.donor_id)
+            results.append({
+                "time":        apt.time_slot or "--:--",
+                "donor_name":  donor.username if donor else "Unknown Donor",
+                "blood_group": donor.blood_group if donor else "N/A",
+                "status":      apt.status or "scheduled",
+            })
+
+        # If no appointments, fall back to recently approved reports for this bank (walk-ins)
+        if not results:
+            reports = Report.query.filter(
+                db.func.date(Report.upload_date) == today,
+                Report.status == 'approved'
+            ).order_by(Report.upload_date).limit(10).all()
+
+            for rpt in reports:
+                donor = User.query.get(rpt.donor_id)
+                if donor:
+                    results.append({
+                        "time":        rpt.upload_date.strftime('%I:%M %p') if rpt.upload_date else "--",
+                        "donor_name":  donor.username,
+                        "blood_group": donor.blood_group or "N/A",
+                        "status":      "walk-in",
+                    })
+    else:
+        # No bank_id — return all today's appointments across all banks
+        appts = Appointment.query.filter(
+            db.func.date(Appointment.date) == today
+        ).order_by(Appointment.time_slot).limit(10).all()
+
+        for apt in appts:
+            donor = User.query.get(apt.donor_id)
+            results.append({
+                "time":        apt.time_slot or "--:--",
+                "donor_name":  donor.username if donor else "Unknown Donor",
+                "blood_group": donor.blood_group if donor else "N/A",
+                "status":      apt.status or "scheduled",
+            })
+
+    return jsonify(results)
+
 
 @app.route('/api/network', methods=['GET'])
 def get_network():

@@ -328,57 +328,6 @@
                         </div>
                     </div>
 
-                    <!-- Create Camp Form (Hidden by default) -->
-                    <div id="createCampForm" class="modal" style="display: none;">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3>Create New Donation Camp</h3>
-                                <button class="modal-close">&times;</button>
-                            </div>
-                            <form class="camp-form">
-                                <div class="form-group">
-                                    <label>Camp Name *</label>
-                                    <input type="text" required>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label>Date *</label>
-                                        <input type="date" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Start Time *</label>
-                                        <input type="time" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>End Time *</label>
-                                        <input type="time" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Location *</label>
-                                    <input type="text" required>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label>Total Slots *</label>
-                                        <input type="number" min="1" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Slot Duration (minutes) *</label>
-                                        <input type="number" min="15" value="30" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea rows="3"></textarea>
-                                </div>
-                                <div class="form-actions">
-                                    <button type="submit" class="btn-primary">Create Camp</button>
-                                    <button type="button" class="btn-secondary modal-close">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -480,6 +429,62 @@
 
     <script src="js/dashboard-common.js"></script>
     <script src="js/bank-dashboard.js"></script>
+
+    <!-- Create Camp Modal -->
+    <div id="createCampForm" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Donation Camp</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form class="modal-body">
+                <div class="form-group">
+                    <label>Camp Name *</label>
+                    <input type="text" id="campName" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date *</label>
+                        <input type="date" id="campDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Time *</label>
+                        <input type="time" id="campStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label>End Time *</label>
+                        <input type="time" id="campEnd" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Location *</label>
+                    <input type="text" id="campLocation" required>
+                </div>
+                <div class="form-group">
+                    <label>Target Blood Groups (comma-separated)</label>
+                    <input type="text" id="campTarget" placeholder="e.g. A+, B+, AB-, O+">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Total Slots *</label>
+                        <input type="number" id="campSlots" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Slot Duration (minutes) *</label>
+                        <input type="number" id="campSlotDuration" min="15" value="30" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="campDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Create Camp</button>
+                    <button type="button" class="btn-secondary modal-close">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Edit Camp Modal -->
     <div id="editCampModal" class="modal" style="display: none;">

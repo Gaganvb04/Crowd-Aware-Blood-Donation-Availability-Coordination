@@ -793,9 +793,10 @@ body {
     z-index: 1000;
     background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(4px);
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 20px;
+    padding: 40px 20px;
+    overflow-y: auto;
 }
 
 .modal-content {
